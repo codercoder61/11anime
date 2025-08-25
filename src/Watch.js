@@ -328,17 +328,7 @@ const EpisodeBrowser = ({
       </div>
       <div>
       <div style={{display:'flex',justifyContent:'space-between'}}>
-      <div style={{
-  width: '100%',
-  maxWidth: '65%',  // Keeps the video container to a reasonable width
-  margin: '20px auto',  // Centers the container horizontally
-  position: 'relative',
-  paddingTop: '56.25%',  // Maintains a 16:9 aspect ratio (9 / 16 * 100 = 56.25%)
-  backgroundColor: '#000',  // Black background in case the iframe fails to load
-  borderRadius: '12px',  // Slightly rounded corners for a modern look
-  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',  // Optional shadow for visual depth
-  overflow: 'hidden',  // Prevents the iframe from overflowing
-}}>
+      <div id='mop'>
 <iframe 
 ref={frm}
     width="100%"
