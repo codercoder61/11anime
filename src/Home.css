@@ -423,7 +423,7 @@ display:flex;align-items:center;margin:25px 0 0 55px;}
 #gl{
 width: 65%;
     height:fit-content;
-    margin: 20px 65px;
+    margin: 20px auto;
     position: relative;
     overflow: hidden;
     display:flex;
