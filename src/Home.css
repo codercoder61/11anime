@@ -15,13 +15,13 @@ body{
 }
 #mop{
 width: 100%;
-  max-width: 65%; // Keeps the video container to a reasonable width
-  margin: 20px auto;  // Centers the container horizontally
+  max-width: 65%; 
+  margin: 20px auto;  
   position: relative;
-  padding-top: 56.25%; // Maintains a 16:9 aspect ratio (9 / 16 * 100 = 56.25%)
-  background-clor: #000;  // Black background in case the iframe fails to load
-  border-rdius: 12px; // Slightly rounded corners for a modern look
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); // Optional shadow for visual depth
+  padding-top: 56.25%; 
+  background-clor: #000;  
+  border-rdius: 12px; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
   overflow: hidden;
 }
 #links span{
