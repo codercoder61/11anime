@@ -761,7 +761,7 @@ setLoading(true);
     
     </div>
       <div style={{position:'relative',padding:'10px',backgroundColor:'#222',width:'100%',height:'fit-content',paddingBottom:'30px'}}>
-        <img style={{position:'absolute',right:'10px',width:'180px'}} src='https://9animetv.to/images/footer-icon.png'/>
+        <img id='maga' src='https://9animetv.to/images/footer-icon.png'/>
           <p style={{color:'gray',marginLeft:'15px'}}>A-Z LIST   |   Searching anime order by alphabet name A to Z.</p>
           <div className='alphabet'>
             <span onClick={() => handleClick('')}>#</span>
