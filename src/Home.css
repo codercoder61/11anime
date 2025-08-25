@@ -24,7 +24,9 @@ body{
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
   overflow: hidden;
 }
-
+#kol{
+	width:180px;margin-right:20px;
+}
 #links span{
     color: #fff;
     cursor: pointer;
@@ -438,7 +440,7 @@ position:absolute;right:10px;width:180px;}
   }
 #maga{
 display:none;}
-#gl img{
+#gl #kol{
 margin:auto;
 }
 #gl p{
