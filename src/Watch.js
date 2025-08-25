@@ -328,24 +328,22 @@ const EpisodeBrowser = ({
       </div>
       <div>
       <div style={{display:'flex',justifyContent:'center'}}>
-      <div id='mop'>
-<iframe 
-ref={frm}
+     <div id="mop">
+  <iframe 
+    ref={frm}
     width="100%"
     height="100%"
     frameBorder="0"
     scrolling="no"
     allowFullScreen
     style={{
-      position: 'absolute',  // Keeps the iframe in position inside the container
-      top: '0', 
-      left: '0',
-      width: '100%',  // Ensures iframe fills the container's width
-      height: '100%',  // Ensures iframe fills the container's height
+      position: 'absolute',
+      top: 0, 
+      left: 0,
+      width: '100%',
+      height: '100%',
     }}
   ></iframe>
-  
-
 </div>
 
 
