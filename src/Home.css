@@ -13,14 +13,14 @@ body{
     position: relative;
     z-index: 500000;
 }
-#mop{
-width: 100%;
+#mop {
+  width: 100%;
   max-width: 65%; 
   margin: 20px auto;  
   position: relative;
-  padding-top: 56.25%; 
-  background-clor: #000;  
-  border-rdius: 12px; 
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  background-color: #000;   /* Fixed typo: background-clor → background-color */
+  border-radius: 12px;      /* Fixed typo: border-rdius → border-radius */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
   overflow: hidden;
 }
@@ -428,10 +428,13 @@ width: 65%;
 #maga{
 position:absolute;right:10px;width:180px;}
 @media only screen and (max-width: 375px) {
-#mop{
-max-width:80%;
-aspect-ratio:16/9;
-}
+#mop {
+    width: 100vw;
+    max-width: none;
+    margin: 10px auto;
+    padding-top: 56.25%;
+    border-radius: 0; /* Optional: remove radius on very small screens */
+  }
 #maga{
 display:none;}
 #gl img{
