@@ -423,7 +423,7 @@ const EpisodeBrowser = ({
   id='gl'
 >
 <div>
-<img style={{width:'180px',marginRight:'20px'}} src={animeData && animeData.poster}/>
+<img id='kol' src={animeData && animeData.poster}/>
 </div>
 <div style={{color:'gray'}}>
   <h1 style={{color:'white'}}>{animeData && animeData.title}</h1><br/>
