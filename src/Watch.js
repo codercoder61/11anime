@@ -327,7 +327,7 @@ const EpisodeBrowser = ({
         <p style={{margin:'20px 65px',color:'#666',fontSize:'1.2em',fontWeight:'bold'}}><span>Home &gt;</span> <span>{animeData && animeData.title}</span> </p>
       </div>
       <div>
-      <div style={{display:'flex',justifyContent:'space-between'}}>
+      <div style={{display:'flex',justifyContent:'center'}}>
       <div id='mop'>
 <iframe 
 ref={frm}
