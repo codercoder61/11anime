@@ -413,7 +413,7 @@ width:75%;height:100px;margin:20px 55px;}
 display:flex;align-items:center;margin:25px 0 0 55px;}
 #epo{
 	width: 65%;
-        margin: 20px 65px;
+        margin: 20px auto;
         position: relative;
         background-color: #1b1b1b;
         padding: 20px 0 10px 10px;
