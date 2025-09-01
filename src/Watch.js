@@ -141,27 +141,30 @@ const changeSource = async (episodeId) => {
   const mainUrl = `https://megaplay.buzz/stream/s-2/${episodeId}/sub`;
   const fallbackUrl = `https://megaplay.buzz/stream/s-2/${episodeId}/dub`;
 
+  let hasLoaded = false;
+
+  // Set iframe src
   iframe.src = mainUrl;
 
-  // Fallback after 5 seconds if iframe looks empty
-  setTimeout(() => {
-    try {
-      // This will throw error due to cross-origin, but we catch it
-      const isEmpty = !iframe.contentWindow || iframe.contentWindow.length === 0;
+  // Define onload handler
+  const onLoadHandler = () => {
+    console.log("Iframe loaded successfully.");
+    hasLoaded = true;
+  };
 
-      if (isEmpty) {
-        console.warn("Iframe likely failed. Switching to fallback...");
-        iframe.src = fallbackUrl;
-      } else {
-        console.log("Iframe seems to have content.");
-      }
-    } catch (err) {
-      // Cross-origin error, can't access content
-      console.warn("Can't verify iframe load due to cross-origin restrictions. Applying fallback anyway.");
+  // Attach load handler
+  iframe.onload = onLoadHandler;
+
+  // Wait 5 seconds before deciding to fallback
+  setTimeout(() => {
+    if (!hasLoaded) {
+      console.warn("Iframe didn't load within timeout. Switching to fallback...");
+      iframe.onload = null; // Remove the old handler to avoid triggering it again
       iframe.src = fallbackUrl;
     }
   }, 5000);
 };
+
 
   const [selectedRangeKey, setSelectedRangeKey] = useState(null);
 const hlsRef = useRef(null);
