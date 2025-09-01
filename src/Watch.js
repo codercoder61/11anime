@@ -134,16 +134,18 @@ useEffect(()=>{
     console.error('Error:', error);
   })
 },[dataId])
-const changeSource = async (episodeId,dub=false) => {
+const changeSource = async (episodeId, dub = false) => {
   if (!frm.current) return;
+
   const iframe = frm.current;
-	if(!dub)
-  		const mainUrl = `https://megaplay.buzz/stream/s-2/${episodeId}/sub`;
-  	else
-  		const mainUrl = `https://megaplay.buzz/stream/s-2/${episodeId}/dub`;
-		
-	iframe.src = mainUrl;
+
+  const mainUrl = dub
+    ? `https://megaplay.buzz/stream/s-2/${episodeId}/dub`
+    : `https://megaplay.buzz/stream/s-2/${episodeId}/sub`;
+
+  iframe.src = mainUrl;
 };
+
 
 
   const [selectedRangeKey, setSelectedRangeKey] = useState(null);
