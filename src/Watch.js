@@ -6,6 +6,28 @@ import { useNavigate } from 'react-router-dom';
 import Plyr from 'plyr';
 import Hls from 'hls.js';
 function Watch() {
+const [hover, setHover] = useState(false);
+  const [hoverFallback, setHoverFallback] = useState(false);
+	const buttonStyle = {
+  color: 'white',
+  backgroundColor: '#5a2e98',
+  outline: 'none',
+  border: 'none',
+  padding: '10px 20px',
+  borderRadius: '15px',
+  boxShadow: '0 0 5px grey',
+  fontSize: '1.1em',
+  margin: '10px',
+  cursor: 'pointer',
+  transition: 'background-color 0.3s ease, transform 0.2s ease',
+};
+
+const buttonHoverStyle = {
+  backgroundColor: '#47247a',
+  transform: 'scale(1.02)',
+};
+
+	
   const navigate = useNavigate();
   const videoRef = useRef(null);
   const frm = useRef(null);
@@ -424,7 +446,12 @@ const EpisodeBrowser = ({
               </select><br/><br/>
               <button style={{color:'white',backgroundColor:'#5a2e98',outline:'none',border:'none',padding:'10px',borderRadius:'15px',boxShadow:'0 0 5px grey',fontSize:'1.3em'}}>Filter</button>
             </form>
-<button onClick={() => changeSource(episodeId,true)}>
+<button style={{
+          ...buttonStyle,
+          ...(hoverFallback ? buttonHoverStyle : {})
+        }}
+        onMouseEnter={() => setHoverFallback(true)}
+        onMouseLeave={() => setHoverFallback(false)} onClick={() => changeSource(episodeId,true)}>
   			Use Fallback (Dub)
 	</button>
     </div>
