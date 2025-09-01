@@ -134,27 +134,38 @@ useEffect(()=>{
     console.error('Error:', error);
   })
 },[dataId])
-const changeSource = async (episodeId)=>{
-	let hasLoaded = false;
-	const onIframeLoad = () => {
-      hasLoaded = true;
-      console.log("Iframe loaded successfully.");
-    };
+const changeSource = async (episodeId) => {
+  if (!frm.current) return;
 
-    frm.current.onload = onIframeLoad;
-	const fallbackUrl = `https://megaplay.buzz/stream/s-2/${episodeId}/dub`
-  frm.current.src= `https://megaplay.buzz/stream/s-2/${episodeId}/sub`
+  const iframe = frm.current;
+  const mainUrl = `https://megaplay.buzz/stream/s-2/${episodeId}/sub`;
+  const fallbackUrl = `https://megaplay.buzz/stream/s-2/${episodeId}/dub`;
 
-	setTimeout(() => {
-      if (!hasLoaded) {
-        console.warn("Iframe failed to load, switching to fallback...");
-        frm.current.src = fallbackUrl;
-      }
-    }, 5000); // 5 seconds
+  let hasLoaded = false;
 
+  // Clean up any previous onload handler
+  iframe.onload = null;
 
-	
-}
+  // Set a new onload handler
+  const onIframeLoad = () => {
+    hasLoaded = true;
+    console.log("Iframe loaded successfully.");
+  };
+
+  iframe.onload = onIframeLoad;
+
+  // Set main source
+  iframe.src = mainUrl;
+
+  // Set fallback after timeout if not loaded
+  setTimeout(() => {
+    if (!hasLoaded) {
+      console.warn("Iframe failed to load, switching to fallback...");
+      iframe.src = fallbackUrl;
+    }
+  }, 5000);
+};
+
   const [selectedRangeKey, setSelectedRangeKey] = useState(null);
 const hlsRef = useRef(null);
 const EpisodeBrowser = ({ 
