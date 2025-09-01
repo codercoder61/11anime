@@ -136,33 +136,9 @@ useEffect(()=>{
 },[dataId])
 const changeSource = async (episodeId) => {
   if (!frm.current) return;
-
   const iframe = frm.current;
   const mainUrl = `https://megaplay.buzz/stream/s-2/${episodeId}/sub`;
-  const fallbackUrl = `https://megaplay.buzz/stream/s-2/${episodeId}/dub`;
-
-  let hasLoaded = false;
-
-  // Set iframe src
   iframe.src = mainUrl;
-
-  // Define onload handler
-  const onLoadHandler = () => {
-    console.log("Iframe loaded successfully.");
-    hasLoaded = true;
-  };
-
-  // Attach load handler
-  iframe.onload = onLoadHandler;
-
-  // Wait 5 seconds before deciding to fallback
-  setTimeout(() => {
-    if (!hasLoaded) {
-      console.warn("Iframe didn't load within timeout. Switching to fallback...");
-      iframe.onload = null; // Remove the old handler to avoid triggering it again
-      iframe.src = fallbackUrl;
-    }
-  }, 5000);
 };
 
 
