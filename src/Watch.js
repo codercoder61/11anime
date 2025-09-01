@@ -135,7 +135,25 @@ useEffect(()=>{
   })
 },[dataId])
 const changeSource = async (episodeId)=>{
+	let hasLoaded = false;
+	const onIframeLoad = () => {
+      hasLoaded = true;
+      console.log("Iframe loaded successfully.");
+    };
+
+    frm.current.onload = onIframeLoad;
+	const fallbackUrl = `https://megaplay.buzz/stream/s-2/${episodeId}/dub`
   frm.current.src= `https://megaplay.buzz/stream/s-2/${episodeId}/sub`
+
+	setTimeout(() => {
+      if (!hasLoaded) {
+        console.warn("Iframe failed to load, switching to fallback...");
+        frm.current.src = fallbackUrl;
+      }
+    }, 5000); // 5 seconds
+
+
+	
 }
   const [selectedRangeKey, setSelectedRangeKey] = useState(null);
 const hlsRef = useRef(null);
