@@ -128,13 +128,15 @@ useEffect(()=>{
     setAnimeEpisodes(response.data.episodes.sort((a, b) => a.number - b.number))
     let episodeId = response.data.episodes[0].id
     changeSource(episodeId)
-
+	
       })
   .catch(error => {
     console.error('Error:', error);
   })
 },[dataId])
 const changeSource = async (episodeId, dub = false) => {
+	setEpisodeId(episodeId)
+	console.log(episodeId,dub)
   if (!frm.current) return;
 
   const iframe = frm.current;
