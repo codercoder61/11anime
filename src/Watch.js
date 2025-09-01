@@ -141,26 +141,23 @@ const changeSource = async (episodeId) => {
   const mainUrl = `https://megaplay.buzz/stream/s-2/${episodeId}/sub`;
   const fallbackUrl = `https://megaplay.buzz/stream/s-2/${episodeId}/dub`;
 
-  let hasLoaded = false;
-
-  // Clean up any previous onload handler
-  iframe.onload = null;
-
-  // Set a new onload handler
-  const onIframeLoad = () => {
-    hasLoaded = true;
-    console.log("Iframe loaded successfully.");
-  };
-
-  iframe.onload = onIframeLoad;
-
-  // Set main source
   iframe.src = mainUrl;
 
-  // Set fallback after timeout if not loaded
+  // Fallback after 5 seconds if iframe looks empty
   setTimeout(() => {
-    if (!hasLoaded) {
-      console.warn("Iframe failed to load, switching to fallback...");
+    try {
+      // This will throw error due to cross-origin, but we catch it
+      const isEmpty = !iframe.contentWindow || iframe.contentWindow.length === 0;
+
+      if (isEmpty) {
+        console.warn("Iframe likely failed. Switching to fallback...");
+        iframe.src = fallbackUrl;
+      } else {
+        console.log("Iframe seems to have content.");
+      }
+    } catch (err) {
+      // Cross-origin error, can't access content
+      console.warn("Can't verify iframe load due to cross-origin restrictions. Applying fallback anyway.");
       iframe.src = fallbackUrl;
     }
   }, 5000);
