@@ -440,7 +440,10 @@ const EpisodeBrowser = ({
               </select><br/><br/>
               <button style={{color:'white',backgroundColor:'#5a2e98',outline:'none',border:'none',padding:'10px',borderRadius:'15px',boxShadow:'0 0 5px grey',fontSize:'1.3em'}}>Filter</button>
             </form>
-        </div>
+	  <button onClick={() => frm.current.src = `https://megaplay.buzz/stream/s-2/${episodeId}/dub`}>
+  			Use Fallback (Dub)
+	</button>
+    </div>
 </div>
 <EpisodeBrowser episodes={animeEpisodes}
   selectedRangeKey={selectedRangeKey}
