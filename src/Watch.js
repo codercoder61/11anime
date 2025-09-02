@@ -360,6 +360,14 @@ const EpisodeBrowser = ({
       </header>
       <div>
         <p style={{margin:'20px 65px',color:'#666',fontSize:'1.2em',fontWeight:'bold'}}><span>Home &gt;</span> <span>{animeData && animeData.title}</span> </p>
+					 <button style={{
+          ...buttonStyle,
+          ...(hoverFallback ? buttonHoverStyle : {})
+        }}
+        onMouseEnter={() => setHoverFallback(true)}
+        onMouseLeave={() => setHoverFallback(false)} onClick={() => changeSource(episodeId,true)}>
+  			Use Fallback (Dub)
+	</button>
       </div>
       <div>
       <div style={{display:'flex',justifyContent:'center'}}>
@@ -446,14 +454,7 @@ const EpisodeBrowser = ({
               </select><br/><br/>
               <button style={{color:'white',backgroundColor:'#5a2e98',outline:'none',border:'none',padding:'10px',borderRadius:'15px',boxShadow:'0 0 5px grey',fontSize:'1.3em'}}>Filter</button>
             </form>
-<button style={{
-          ...buttonStyle,
-          ...(hoverFallback ? buttonHoverStyle : {})
-        }}
-        onMouseEnter={() => setHoverFallback(true)}
-        onMouseLeave={() => setHoverFallback(false)} onClick={() => changeSource(episodeId,true)}>
-  			Use Fallback (Dub)
-	</button>
+
     </div>
 </div>
 <EpisodeBrowser episodes={animeEpisodes}
