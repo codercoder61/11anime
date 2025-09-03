@@ -17,7 +17,7 @@ const [hover, setHover] = useState(false);
   borderRadius: '15px',
   boxShadow: '0 0 5px grey',
   fontSize: '1.1em',
-  margin: '10px',
+  margin: '10px 65px',
   cursor: 'pointer',
   transition: 'background-color 0.3s ease, transform 0.2s ease',
 };
