@@ -34,7 +34,10 @@ const VideoPlayer = React.memo(({ m3u8Url, tracks = [] }) => {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-
+if (hlsRef.current) {
+      hlsRef.current.destroy();
+      hlsRef.current = null;
+    }
     // Clean up previous player
     if (plyrRef.current) {
       plyrRef.current.destroy();
@@ -63,8 +66,41 @@ const VideoPlayer = React.memo(({ m3u8Url, tracks = [] }) => {
       }
     }, 0);
 
+	    // Initialize HLS.js
+    const hls = new Hls({
+      enableWebVTT: true, // Allow captions
+    });
+
+    hls.loadSource(m3u8Url);
+    hls.attachMedia(video);
+    hlsRef.current = hls;
+
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      // Initialize Plyr
+      plyrRef.current = new Plyr(video, {
+        captions: { active: true, update: true, language: 'en' },
+        controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen'],
+      });
+
+      // Show HLS subtitles
+      hls.subtitleDisplay = true;
+
+      // Listen for Plyr language change
+      plyrRef.current.on('languagechange', () => {
+        const plyr = plyrRef.current;
+        const selectedTrack = plyr.currentTrack;
+
+        if (selectedTrack >= 0) {
+          hls.subtitleTrack = selectedTrack;
+        } else {
+          hls.subtitleTrack = -1; // disable
+        }
+      });
+    });
+
     return () => {
       plyrRef.current?.destroy();
+	  hlsRef.current?.destroy();
     };
   }, [m3u8Url, tracks]);
 
