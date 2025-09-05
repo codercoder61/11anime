@@ -86,8 +86,6 @@ const VideoPlayer = React.memo(({ m3u8Url, tracks = [] }) => {
             src={track.file}
             kind={track.kind || 'subtitles'}
             label={track.label || `Track ${index + 1}`}
-            srcLang={track.srcLang || 'en'}
-            default={track.default || false}
           />
         ))}
       </video>
