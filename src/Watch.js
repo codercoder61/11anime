@@ -32,10 +32,43 @@ const VideoPlayer = React.memo(({ m3u8Url, tracks = [] }) => {
   const hlsRef = useRef(null);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+  const video = videoRef.current;
+  if (!video) return;
 
-    // Clean up previous instances
+  // Destroy existing Plyr and HLS instances
+  if (plyrRef.current) {
+    plyrRef.current.destroy();
+    plyrRef.current = null;
+  }
+  if (hlsRef.current) {
+    hlsRef.current.destroy();
+    hlsRef.current = null;
+  }
+
+  if (Hls.isSupported()) {
+    const hls = new Hls();
+    hls.loadSource(m3u8Url);
+    hls.attachMedia(video);
+
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      plyrRef.current = new Plyr(video, {
+        captions: { active: true, update: true, language: 'en' },
+        controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen'],
+      });
+    });
+
+    hlsRef.current = hls;
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = m3u8Url;
+    video.addEventListener('loadedmetadata', () => {
+      plyrRef.current = new Plyr(video, {
+        captions: { active: true, update: true, language: 'en' },
+        controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen'],
+      });
+    });
+  }
+
+  return () => {
     if (plyrRef.current) {
       plyrRef.current.destroy();
       plyrRef.current = null;
@@ -44,43 +77,9 @@ const VideoPlayer = React.memo(({ m3u8Url, tracks = [] }) => {
       hlsRef.current.destroy();
       hlsRef.current = null;
     }
+  };
+}, [m3u8Url, JSON.stringify(tracks)]); // Note: stringify tracks for deep comparison
 
-    // Initialize HLS.js or fallback to native HLS
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(m3u8Url);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        // Now that HLS is ready, initialize Plyr
-        plyrRef.current = new Plyr(video, {
-          captions: { active: true, update: true, language: 'en' },
-          controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen'],
-        });
-      });
-      hlsRef.current = hls;
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      // For Safari or native HLS browsers
-      video.src = m3u8Url;
-      video.addEventListener('loadedmetadata', () => {
-        plyrRef.current = new Plyr(video, {
-          captions: { active: true, update: true, language: 'en' },
-          controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen'],
-        });
-      });
-    }
-
-    return () => {
-      // Cleanup on unmount or before re-run
-      if (plyrRef.current) {
-        plyrRef.current.destroy();
-        plyrRef.current = null;
-      }
-      if (hlsRef.current) {
-        hlsRef.current.destroy();
-        hlsRef.current = null;
-      }
-    };
-  }, [m3u8Url]);
 
   return (
     <div style={{ height: '100%' }}>
