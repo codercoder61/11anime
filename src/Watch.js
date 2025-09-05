@@ -21,6 +21,7 @@ const [m3u8Url,setM3u8Url] = useState(null)
     });
 }
 	const VideoPlayer = ({ m3u8Url }) => {
+		const player = new Plyr('#player');
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -59,6 +60,7 @@ const [m3u8Url,setM3u8Url] = useState(null)
       <video
         ref={videoRef}
         controls
+		id='player'
         width="100%"
         height="auto"
         style={{ background: '#000' }}
