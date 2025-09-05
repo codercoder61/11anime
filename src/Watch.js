@@ -472,22 +472,24 @@ const EpisodeBrowser = ({
       <div>
       <div style={{display:'flex',justifyContent:'center'}}>
      <div id="mop">
-	  {!m3u8Url && <iframe 
-    ref={frm}
-    width="100%"
-    height="100%"
-    frameBorder="0"
-    scrolling="no"
-    allowFullScreen
-    style={{
-      position: 'absolute',
-      top: 0, 
-      left: 0,
-      width: '100%',
-      height: '100%',
-    }}
-  ></iframe>}
-{m3u8Url && <VideoPlayer m3u8Url={m3u8Url} />}
+	  {m3u8Url
+  ? <VideoPlayer m3u8Url={m3u8Url} />
+  : <iframe 
+      ref={frm}
+      width="100%"
+      height="100%"
+      frameBorder="0"
+      scrolling="no"
+      allowFullScreen
+      style={{
+        position: 'absolute',
+        top: 0, 
+        left: 0,
+        width: '100%',
+        height: '100%',
+      }}
+    />
+}
 </div>
 
 
