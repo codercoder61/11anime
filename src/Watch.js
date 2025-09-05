@@ -1,4 +1,4 @@
-import React,{useRef,useState,useEffect} from 'react'
+import React,{useRef,useState,useEffect,useMemo} from 'react'
 import './Home.css'
 import axios from 'axios'
 import { useSearchParams,Link } from 'react-router-dom';
@@ -26,7 +26,7 @@ const [m3u8Url,setM3u8Url] = useState(null)
       console.error('Error:', error);
     });
 }
-const VideoPlayer = ({ m3u8Url, tracks = [] }) => {
+const VideoPlayer = useMemo(({ m3u8Url, tracks = [] }) => {
   const videoRef = useRef(null);
   const plyrRef = useRef(null);
   const hlsRef = useRef(null);
@@ -106,7 +106,7 @@ const VideoPlayer = ({ m3u8Url, tracks = [] }) => {
       </video>
     </div>
   );
-};
+}, []); // Empty deps = only create once
 const [hover, setHover] = useState(false);
   const [hoverFallback, setHoverFallback] = useState(false);
 	const buttonStyle = {
