@@ -372,13 +372,19 @@ const EpisodeBrowser = ({
         <p style={{margin:'20px 65px',color:'#666',fontSize:'1.2em',fontWeight:'bold'}}><span>Home &gt;</span> <span>{animeData && animeData.title}</span> </p>
 					
 <div style={{margin:'10px 65px'}}>
- <button onClick={() => changeSource(episodeId,true)}>
+ <button style={{
+        ...buttonStyle,
+      }}
+					 onClick={() => changeSource(episodeId,true)}>
   			Use Fallback (Dub)
 	</button>
 
 {
   (servers && servers.sub) && servers.sub.map((server, index) => (
     <button
+	  style={{
+        ...buttonStyle,
+      }}
       key={index}
       onClick={() => changeSource(episodeId, true)}
     >
@@ -391,6 +397,9 @@ const EpisodeBrowser = ({
   (servers && servers.dub) && servers.dub.map((server, index) => (
     <button
       key={index}
+	style={{
+        ...buttonStyle,
+      }}
       onClick={() => changeSource(episodeId, true)}
     >
       Use server {server.name} ({server.type})
