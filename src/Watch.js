@@ -234,6 +234,18 @@ useEffect(()=>{
   })
 },[dataId])
 const changeSource = async (episodeId, dub = false) => {
+	axios
+  .get('https://hianimeapi-09b09f8b1d48.herokuapp.com/episodeServers', {
+    params: { episodeId }
+  })
+  .then(response => {
+    console.log('Response:', response);
+   	setServers(response.data)
+	
+      })
+  .catch(error => {
+    console.error('Error:', error);
+  })
 	mop.current.style.paddingTop = "56.25%"
 	setM3u8Url(null)
 	setEpisodeId(episodeId)
