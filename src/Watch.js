@@ -26,14 +26,16 @@ const [m3u8Url,setM3u8Url] = useState(null)
       console.error('Error:', error);
     });
 }
-const VideoPlayer = ({ m3u8Url }) => {
+const VideoPlayer = ({ m3u8Url, tracks = [] }) => {
   const videoRef = useRef(null);
   const plyrRef = useRef(null); // For Plyr instance
+  const hlsRef = useRef(null);  // To clean up HLS
 
   useEffect(() => {
     let hls;
 
     if (videoRef.current) {
+      // HLS setup
       if (Hls.isSupported()) {
         hls = new Hls();
         hls.loadSource(m3u8Url);
@@ -44,39 +46,43 @@ const VideoPlayer = ({ m3u8Url }) => {
             console.error('HLS.js error:', data);
           }
         });
+
+        hlsRef.current = hls;
       } else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
         videoRef.current.src = m3u8Url;
       }
 
-      // Initialize Plyr only once
-      if (!plyrRef.current) {
-        plyrRef.current = new Plyr(videoRef.current, {
-          controls: [
-            'play',
-            'progress',
-            'current-time',
-            'mute',
-            'volume',
-            'settings',
-            'fullscreen',
-          ],
-        });
-      }
-    }
-
-    return () => {
-      // Clean up Plyr
+      // Plyr setup (destroy if already exists)
       if (plyrRef.current) {
         plyrRef.current.destroy();
         plyrRef.current = null;
       }
 
-      // Clean up HLS
-      if (hls) {
-        hls.destroy();
+      plyrRef.current = new Plyr(videoRef.current, {
+        controls: [
+          'play',
+          'progress',
+          'current-time',
+          'mute',
+          'volume',
+          'settings',
+          'fullscreen',
+        ],
+      });
+    }
+
+    return () => {
+      // Cleanup
+      if (plyrRef.current) {
+        plyrRef.current.destroy();
+        plyrRef.current = null;
+      }
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
       }
     };
-  }, [m3u8Url]);
+  }, [m3u8Url, tracks]); // Re-run when subtitles/tracks change
 
   return (
     <div style={{ height: '100%' }}>
@@ -85,17 +91,20 @@ const VideoPlayer = ({ m3u8Url }) => {
         controls
         style={{ height: '100%', width: '100%' }}
         playsInline
+        crossOrigin="anonymous"
       >
-	{tracks && tracks.map((track, index) => (
-    <track
-      key={index}
-      src={track.file}
-      kind={track.kind}
-      label={track.label || undefined}
-      default={track.default || undefined}
-    />
-  ))}		
-	</video>
+        <source src={m3u8Url} type="application/x-mpegURL" />
+        {tracks.map((track, index) => (
+          <track
+            key={index}
+            src={track.file}
+            kind={track.kind}
+            label={track.label || undefined}
+            default={track.default || undefined}
+            srcLang={track.srcLang || undefined}
+          />
+        ))}
+      </video>
     </div>
   );
 };
