@@ -16,6 +16,10 @@ body{
 #mop > div > div{
 	height:100%;
 }
+#plyr-settings-8863-captions > div{
+	max-height:200px;
+	overflow-y:scroll;
+}
 #mop {
   width: 100%;
   max-width: 65%; 
