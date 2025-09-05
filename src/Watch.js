@@ -486,6 +486,7 @@ const EpisodeBrowser = ({
       </header>
      
       <div>
+					 <p style={{margin:'20px 65px',color:'#666',fontSize:'1.2em',fontWeight:'bold'}}><span>Home &gt;</span> <span>{animeData && animeData.title}</span> </p>
       <div style={{display:'flex',justifyContent:'center'}}>
      <div ref={mop} id="mop">
 	  {m3u8Url
@@ -587,7 +588,7 @@ src={iframeSrc} // <-- controlled via React
   id='gl'
 >
 	   <div>
-        <p style={{margin:'20px 65px',color:'#666',fontSize:'1.2em',fontWeight:'bold'}}><span>Home &gt;</span> <span>{animeData && animeData.title}</span> </p>
+        
 					
 <div style={{margin:'10px 65px'}}>
  <button style={{
