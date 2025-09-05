@@ -22,35 +22,52 @@ const [m3u8Url,setM3u8Url] = useState(null)
       console.error('Error:', error);
     });
 }
-	const VideoPlayer = ({ m3u8Url }) => {
-		const player = new Plyr('#player');
+const VideoPlayer = ({ m3u8Url }) => {
   const videoRef = useRef(null);
+  const plyrRef = useRef(null); // For Plyr instance
 
   useEffect(() => {
     let hls;
 
-    // Check if HLS.js is supported by the browser
-    if (Hls.isSupported()) {
-      hls = new Hls();
+    if (videoRef.current) {
+      if (Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(m3u8Url);
+        hls.attachMedia(videoRef.current);
 
-      // Bind HLS to the video element and load the m3u8 URL
-      hls.loadSource(m3u8Url);
-      hls.attachMedia(videoRef.current);
+        hls.on(Hls.Events.ERROR, (event, data) => {
+          if (data.fatal) {
+            console.error('HLS.js error:', data);
+          }
+        });
+      } else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
+        videoRef.current.src = m3u8Url;
+      }
 
-      // Handle errors
-      hls.on(Hls.Events.ERROR, (event, data) => {
-        if (data.fatal) {
-          console.error('HLS.js error:', data);
-        }
-      });
+      // Initialize Plyr only once
+      if (!plyrRef.current) {
+        plyrRef.current = new Plyr(videoRef.current, {
+          controls: [
+            'play',
+            'progress',
+            'current-time',
+            'mute',
+            'volume',
+            'settings',
+            'fullscreen',
+          ],
+        });
+      }
     }
-    // Fallback to native HLS support (for Safari)
-    else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
-      videoRef.current.src = m3u8Url;
-    }
 
-    // Clean up on component unmount
     return () => {
+      // Clean up Plyr
+      if (plyrRef.current) {
+        plyrRef.current.destroy();
+        plyrRef.current = null;
+      }
+
+      // Clean up HLS
       if (hls) {
         hls.destroy();
       }
@@ -58,15 +75,12 @@ const [m3u8Url,setM3u8Url] = useState(null)
   }, [m3u8Url]);
 
   return (
-    <div style={{height:'100%'}}>
+    <div style={{ height: '100%' }}>
       <video
         ref={videoRef}
         controls
-		id='player'
-        
-		
-		style={{height:'100%',width:'100%'}}
-        height="auto"
+        style={{ height: '100%', width: '100%' }}
+        playsInline
       />
     </div>
   );
