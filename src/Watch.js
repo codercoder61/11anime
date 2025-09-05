@@ -234,6 +234,7 @@ useEffect(()=>{
   })
 },[dataId])
 const changeSource = async (episodeId, dub = false) => {
+	mop.current.style.paddingTop = "56.25%"
 	setM3u8Url(null)
 	setEpisodeId(episodeId)
 	console.log(episodeId,dub)
