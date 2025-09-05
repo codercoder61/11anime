@@ -6,8 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import Plyr from 'plyr';
 import Hls from 'hls.js';
 function Watch() {
+	const mop = useRef(null);
 const [m3u8Url,setM3u8Url] = useState(null)
 	const getEpisodeSource = (serverId)=>{
+		mop.current.style.paddingTop = "unset"
 	axios
     .get('https://hianimeapi-09b09f8b1d48.herokuapp.com/episodeSources', {
       params: { serverId }
@@ -475,7 +477,7 @@ const EpisodeBrowser = ({
       </div>
       <div>
       <div style={{display:'flex',justifyContent:'center'}}>
-     <div id="mop">
+     <div ref={mop} id="mop">
 	  {m3u8Url
   ? <VideoPlayer m3u8Url={m3u8Url} />
   : <iframe 
