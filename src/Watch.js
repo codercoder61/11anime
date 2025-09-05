@@ -484,53 +484,7 @@ const EpisodeBrowser = ({
           
         </div>
       </header>
-      <div>
-        <p style={{margin:'20px 65px',color:'#666',fontSize:'1.2em',fontWeight:'bold'}}><span>Home &gt;</span> <span>{animeData && animeData.title}</span> </p>
-					
-<div style={{margin:'10px 65px'}}>
- <button style={{
-        ...buttonStyle,
-      }}
-					 onClick={() => changeSource(episodeId,false)}>
-  			Use (sub)
-	</button>
-					 
-	<button style={{
-        ...buttonStyle,
-      }}
-					 onClick={() => changeSource(episodeId,true)}>
-  			Use Fallback (Dub)
-	</button>
-
-{
-  (servers && servers.sub) && servers.sub.map((server, index) => (
-    <button
-	  style={{
-        ...buttonStyle,
-      }}
-      key={index}
-      onClick={() => getEpisodeSource(server.id)}
-    >
-      Use server {server.name} ({server.type})
-    </button>
-  ))
-}
-
-{
-  (servers && servers.dub) && servers.dub.map((server, index) => (
-    <button
-      key={index}
-	style={{
-        ...buttonStyle,
-      }}
-      onClick={() => getEpisodeSource(server.id)}
-    >
-      Use server {server.name} ({server.type})
-    </button>
-  ))
-}
-	  </div>
-      </div>
+     
       <div>
       <div style={{display:'flex',justifyContent:'center'}}>
      <div ref={mop} id="mop">
@@ -632,6 +586,53 @@ src={iframeSrc} // <-- controlled via React
  <div
   id='gl'
 >
+	   <div>
+        <p style={{margin:'20px 65px',color:'#666',fontSize:'1.2em',fontWeight:'bold'}}><span>Home &gt;</span> <span>{animeData && animeData.title}</span> </p>
+					
+<div style={{margin:'10px 65px'}}>
+ <button style={{
+        ...buttonStyle,
+      }}
+					 onClick={() => changeSource(episodeId,false)}>
+  			Use (sub)
+	</button>
+					 
+	<button style={{
+        ...buttonStyle,
+      }}
+					 onClick={() => changeSource(episodeId,true)}>
+  			Use Fallback (Dub)
+	</button>
+
+{
+  (servers && servers.sub) && servers.sub.map((server, index) => (
+    <button
+	  style={{
+        ...buttonStyle,
+      }}
+      key={index}
+      onClick={() => getEpisodeSource(server.id)}
+    >
+      Use server {server.name} ({server.type})
+    </button>
+  ))
+}
+
+{
+  (servers && servers.dub) && servers.dub.map((server, index) => (
+    <button
+      key={index}
+	style={{
+        ...buttonStyle,
+      }}
+      onClick={() => getEpisodeSource(server.id)}
+    >
+      Use server {server.name} ({server.type})
+    </button>
+  ))
+}
+	  </div>
+      </div>
 <div>
 <img id='kol' src={animeData && animeData.poster}/>
 </div>
