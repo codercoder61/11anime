@@ -267,7 +267,6 @@ const changeSource = async (episodeId, dub = false) => {
   setEpisodeId(episodeId);
   console.log(episodeId, dub);
 
-  if (!frm.current) return;
 
   const iframe = frm.current;
   iframe.src = dub
