@@ -378,6 +378,21 @@ const EpisodeBrowser = ({
         onMouseLeave={() => setHoverFallback(false)} onClick={() => changeSource(episodeId,true)}>
   			Use Fallback (Dub)
 	</button>
+
+
+{
+servers && servers.map((server, index)=>(
+	<button style={{
+          ...buttonStyle,
+          ...(hoverFallback ? buttonHoverStyle : {})
+        }}
+        onMouseEnter={() => setHoverFallback(true)}
+        onMouseLeave={() => setHoverFallback(false)} onClick={() => changeSource(episodeId,true)}>
+  			Use server {server.name) (server.type)
+	</button>
+))
+	
+}
       </div>
       <div>
       <div style={{display:'flex',justifyContent:'center'}}>
