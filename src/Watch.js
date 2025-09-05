@@ -56,12 +56,13 @@ const [m3u8Url,setM3u8Url] = useState(null)
   }, [m3u8Url]);
 
   return (
-    <div>
+    <div style={{height:'100%'}}>
       <video
         ref={videoRef}
         controls
 		id='player'
         width="100%"
+		height="100%"
         height="auto"
       />
     </div>
