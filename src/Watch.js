@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import Plyr from 'plyr';
 import Hls from 'hls.js';
 function Watch() {
+	const [iframeSrc, setIframeSrc] = useState(null);
+
 	const mop = useRef(null);
 const [m3u8Url,setM3u8Url] = useState(null)
 	const getEpisodeSource = (serverId)=>{
@@ -269,9 +271,11 @@ const changeSource = async (episodeId, dub = false) => {
 
 
   const iframe = frm.current;
-  iframe.src = dub
-    ? `https://megaplay.buzz/stream/s-2/${episodeId}/dub`
-    : `https://megaplay.buzz/stream/s-2/${episodeId}/sub`;
+  const newSrc = dub
+  ? `https://megaplay.buzz/stream/s-2/${episodeId}/dub`
+  : `https://megaplay.buzz/stream/s-2/${episodeId}/sub`;
+
+setIframeSrc(newSrc); // <-- use state instead of ref
 };
 
 
@@ -507,7 +511,8 @@ const EpisodeBrowser = ({
      <div ref={mop} id="mop">
 	  {m3u8Url
   ? <VideoPlayer m3u8Url={m3u8Url} />
-  : <iframe 
+  : <iframe
+src={iframeSrc} // <-- controlled via React
       ref={frm}
       width="100%"
       height="100%"
