@@ -17,7 +17,7 @@ const [hover, setHover] = useState(false);
   borderRadius: '15px',
   boxShadow: '0 0 5px grey',
   fontSize: '1.1em',
-  margin: '10px 65px',
+  margin: '10px',
   cursor: 'pointer',
   transition: 'background-color 0.3s ease, transform 0.2s ease',
 };
@@ -379,7 +379,7 @@ const EpisodeBrowser = ({
   			Use Fallback (Dub)
 	</button>
 
-
+<div style={{marginLeft:'10px 65px'}}>
 {
   (servers && servers.sub) && servers.sub.map((server, index) => (
     <button
@@ -413,7 +413,7 @@ const EpisodeBrowser = ({
     </button>
   ))
 }
-
+	  </div>
       </div>
       <div>
       <div style={{display:'flex',justifyContent:'center'}}>
