@@ -32,42 +32,41 @@ const VideoPlayer = React.memo(({ m3u8Url, tracks = [] }) => {
   const hlsRef = useRef(null);
 
   useEffect(() => {
-  const video = videoRef.current;
-  if (!video) return;
+    const video = videoRef.current;
+    if (!video) return;
 
-  if (hlsRef.current) {
-    hlsRef.current.destroy();
-    hlsRef.current = null;
-  }
-  if (plyrRef.current) {
-    plyrRef.current.destroy();
-    plyrRef.current = null;
-  }
+    // Clean up previous player
+    if (plyrRef.current) {
+      plyrRef.current.destroy();
+    }
 
-  const hls = new Hls({ enableWebVTT: true });
-  hls.loadSource(m3u8Url);
-  hls.attachMedia(video);
-  hlsRef.current = hls;
+    // Wait for the <track> tags to be loaded before initializing Plyr
+    setTimeout(() => {
+      plyrRef.current = new Plyr(video, {
+        captions: { active: true, update: true },
+        controls: [
+          'play',
+          'progress',
+          'current-time',
+          'mute',
+          'volume',
+          'captions',
+          'settings',
+          'fullscreen',
+        ],
+      });
 
-  hls.on(Hls.Events.MANIFEST_PARSED, () => {
-    plyrRef.current = new Plyr(video, {
-      captions: { active: true, update: true, language: 'en' },
-      controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen'],
-    });
+      // Optional: Set default caption
+      const defaultTrackIndex = tracks.findIndex(t => t.default);
+      if (defaultTrackIndex !== -1) {
+        video.textTracks[defaultTrackIndex].mode = 'showing';
+      }
+    }, 0);
 
-    // When user selects different captions in Plyr UI
-    plyrRef.current.on('languagechange', () => {
-      const trackIndex = plyrRef.current.currentTrack;
-      hls.subtitleTrack = trackIndex;       // Tell HLS.js to switch
-      hls.subtitleDisplay = true;
-    });
-  });
-
-  return () => {
-    plyrRef.current?.destroy();
-    hlsRef.current?.destroy();
-  };
-}, [m3u8Url]);
+    return () => {
+      plyrRef.current?.destroy();
+    };
+  }, [m3u8Url, tracks]);
 
 
 
@@ -80,14 +79,18 @@ const VideoPlayer = React.memo(({ m3u8Url, tracks = [] }) => {
         playsInline
         style={{ width: '100%', height: '100%' }}
       >
-        {tracks.map((track, index) => (
-          <track
-            key={index}
-            src={track.file}
-            kind={track.kind || 'subtitles'}
-            label={track.label || `Track ${index + 1}`}
-          />
-        ))}
+       {tracks
+          .filter((track) => track.kind === 'captions')
+          .map((track, index) => (
+            <track
+              key={index}
+              src={track.file}
+              kind={track.kind || 'captions'}
+              label={track.label || `Track ${index + 1}`}
+              srcLang={track.label?.toLowerCase().slice(0, 2) || `lang${index}`}
+              default={track.default || false}
+            />
+          ))}
       </video>
     </div>
   );
