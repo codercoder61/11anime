@@ -578,16 +578,7 @@ src={iframeSrc} // <-- controlled via React
 
     </div>
 </div>
-<EpisodeBrowser episodes={animeEpisodes}
-  selectedRangeKey={selectedRangeKey}
-  setSelectedRangeKey={setSelectedRangeKey}
-  selectedEpisode={selectedEpisode}
-  setSelectedEpisode={setSelectedEpisode}
-  changeSource={changeSource} />
-	  <div>
-        
-					
-<div style={{margin:'10px 65px'}}>
+					 <div style={{margin:'10px auto',width:'60%'}}>
  <button style={{
         ...buttonStyle,
       }}
@@ -631,6 +622,16 @@ src={iframeSrc} // <-- controlled via React
 }
 	  </div>
       </div>
+<EpisodeBrowser episodes={animeEpisodes}
+  selectedRangeKey={selectedRangeKey}
+  setSelectedRangeKey={setSelectedRangeKey}
+  selectedEpisode={selectedEpisode}
+  setSelectedEpisode={setSelectedEpisode}
+  changeSource={changeSource} />
+	  <div>
+        
+					
+
  <div
   id='gl'
 >
