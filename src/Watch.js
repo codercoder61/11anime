@@ -473,6 +473,13 @@ const EpisodeBrowser = ({
  <button style={{
         ...buttonStyle,
       }}
+					 onClick={() => changeSource(episodeId,false)}>
+  			Use (sub)
+	</button>
+					 
+	<button style={{
+        ...buttonStyle,
+      }}
 					 onClick={() => changeSource(episodeId,true)}>
   			Use Fallback (Dub)
 	</button>
