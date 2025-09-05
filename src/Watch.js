@@ -7,9 +7,7 @@ import Plyr from 'plyr';
 import Hls from 'hls.js';
 function Watch() {
 const [m3u8Url,setM3u8Url] = useState(null)
-	const VideoPlayer = ({ m3u8Url }) => {
-  const videoRef = useRef(null);
-const getEpisodeSource = (serverId)=>{
+	const getEpisodeSource = (serverId)=>{
 	axios
     .get('https://hianimeapi-09b09f8b1d48.herokuapp.com/episodeSources', {
       params: { serverId }
@@ -21,6 +19,9 @@ const getEpisodeSource = (serverId)=>{
       console.error('Error:', error);
     });
 }
+	const VideoPlayer = ({ m3u8Url }) => {
+  const videoRef = useRef(null);
+
   useEffect(() => {
     let hls;
 
