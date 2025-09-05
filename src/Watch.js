@@ -26,7 +26,7 @@ const [m3u8Url,setM3u8Url] = useState(null)
       console.error('Error:', error);
     });
 }
-const VideoPlayer = useMemo(({ m3u8Url, tracks = [] }) => {
+const VideoPlayer = React.memo(({ m3u8Url, tracks = [] }) => {
   const videoRef = useRef(null);
   const plyrRef = useRef(null);
   const hlsRef = useRef(null);
@@ -58,7 +58,7 @@ const VideoPlayer = useMemo(({ m3u8Url, tracks = [] }) => {
       video.src = m3u8Url;
     }
 
-    // Initialize Plyr AFTER video and tracks are in DOM
+    // Initialize Plyr
     setTimeout(() => {
       plyrRef.current = new Plyr(video, {
         captions: { active: true, update: true, language: 'en' },
@@ -70,7 +70,7 @@ const VideoPlayer = useMemo(({ m3u8Url, tracks = [] }) => {
       });
     }, 0);
 
-    // Cleanup on unmount
+    // Cleanup
     return () => {
       if (plyrRef.current) {
         plyrRef.current.destroy();
@@ -106,7 +106,7 @@ const VideoPlayer = useMemo(({ m3u8Url, tracks = [] }) => {
       </video>
     </div>
   );
-}, []); // Empty deps = only create once
+});
 const [hover, setHover] = useState(false);
   const [hoverFallback, setHoverFallback] = useState(false);
 	const buttonStyle = {
