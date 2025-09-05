@@ -63,7 +63,6 @@ const [m3u8Url,setM3u8Url] = useState(null)
 		id='player'
         width="100%"
         height="auto"
-        style={{ background: '#000' }}
       />
     </div>
   );
