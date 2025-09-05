@@ -7,6 +7,7 @@ import Plyr from 'plyr';
 import Hls from 'hls.js';
 function Watch() {
 	const [iframeSrc, setIframeSrc] = useState(null);
+const [tracks,setTracks]=useState([])
 
 	const mop = useRef(null);
 const [m3u8Url,setM3u8Url] = useState(null)
@@ -18,6 +19,7 @@ const [m3u8Url,setM3u8Url] = useState(null)
     })
     .then(response => {
       console.log('Response:', response);
+		setTracks(response.data.tracks)
 		setM3u8Url("https://zuhaw-proxy.fly.dev/?url="+response.data.sources[0].file)
     })
     .catch(error => {
@@ -83,7 +85,17 @@ const VideoPlayer = ({ m3u8Url }) => {
         controls
         style={{ height: '100%', width: '100%' }}
         playsInline
-      />
+      >
+	{tracks && tracks.map((track, index) => (
+    <track
+      key={index}
+      src={track.file}
+      kind={track.kind}
+      label={track.label || undefined}
+      default={track.default || undefined}
+    />
+  ))}		
+	</video>
     </div>
   );
 };
@@ -131,7 +143,6 @@ if (trackNode) {
 }
 
 
-const [tracks,setTracks]=useState([])
 const track = useRef(null);
   //const player = videojs('my-video');
 const animeId = searchParams.get('animeId');
