@@ -30,7 +30,15 @@ const VideoPlayer = React.memo(({ m3u8Url, tracks = [] }) => {
   const videoRef = useRef(null);
   const plyrRef = useRef(null);
   const hlsRef = useRef(null);
+// Function to enable a specific track when clicked
+  const activateTrack = (index) => {
+    const video = videoRef.current;
+    if (!video) return;
 
+    for (let i = 0; i < video.textTracks.length; i++) {
+      video.textTracks[i].mode = i === index ? 'showing' : 'disabled';
+    }
+  };
   useEffect(() => {
     const video = videoRef.current;
 
@@ -104,6 +112,33 @@ const VideoPlayer = React.memo(({ m3u8Url, tracks = [] }) => {
           />
         ))}
       </video>
+			{/* Scrollable track list UI */}
+      <div
+        className="track-list"
+        style={{
+          maxHeight: '150px',
+          overflowY: 'auto',
+          marginTop: '10px',
+          border: '1px solid #ccc',
+          padding: '8px',
+          borderRadius: '4px',
+        }}
+      >
+        {tracks.map((track, index) => (
+          <div
+            key={index}
+            className="track-item"
+            style={{
+              padding: '6px 10px',
+              borderBottom: '1px solid #eee',
+              cursor: 'pointer',
+            }}
+            onClick={() => activateTrack(index)}
+          >
+            {track.label || `Track ${index + 1}`}
+          </div>
+        ))}
+      </div>
     </div>
   );
 });
