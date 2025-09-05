@@ -14,6 +14,7 @@ const [m3u8Url,setM3u8Url] = useState(null)
     })
     .then(response => {
       console.log('Response:', response);
+		setM3u8Url(response.data.sources[0].file)
     })
     .catch(error => {
       console.error('Error:', error);
@@ -471,7 +472,7 @@ const EpisodeBrowser = ({
       <div>
       <div style={{display:'flex',justifyContent:'center'}}>
      <div id="mop">
-  <iframe 
+	  {!m3u8Url && <iframe 
     ref={frm}
     width="100%"
     height="100%"
@@ -485,7 +486,8 @@ const EpisodeBrowser = ({
       width: '100%',
       height: '100%',
     }}
-  ></iframe>
+  ></iframe>}
+{m3u8Url && <VideoPlayer m3u8Url={m3u8Url} />}
 </div>
 
 
