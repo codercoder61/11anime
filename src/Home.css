@@ -16,15 +16,11 @@ body{
 #mop > div > div{
 	height:100%;
 }
-.plyr__menu__container[data-plyr="captions"] {
-  max-height: 200px !important;
-  overflow-y: auto !important;
+.plyr__menu__container {
+  max-height: 200px;
+  overflow-y: auto;
 }
 
-.plyr__menu__container[role="menu"] {
-  max-height: 200px !important;
-  overflow-y: auto !important;
-}
 #mop {
   width: 100%;
   max-width: 65%; 
