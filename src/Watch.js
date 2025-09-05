@@ -61,8 +61,9 @@ const [m3u8Url,setM3u8Url] = useState(null)
         ref={videoRef}
         controls
 		id='player'
-        width="100%"
-		height="100%"
+        
+		
+		style={{height:'100%',width:'100%'}}
         height="auto"
       />
     </div>
