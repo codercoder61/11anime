@@ -248,30 +248,31 @@ useEffect(()=>{
   })
 },[dataId])
 const changeSource = async (episodeId, dub = false) => {
-	axios
-  .get('https://hianimeapi-09b09f8b1d48.herokuapp.com/episodeServers', {
-    params: { episodeId }
-  })
-  .then(response => {
+  try {
+    const response = await axios.get(
+      'https://hianimeapi-09b09f8b1d48.herokuapp.com/episodeServers',
+      { params: { episodeId } }
+    );
     console.log('Response:', response);
-   	setServers(response.data)
-	
-      })
-  .catch(error => {
+    setServers(response.data);
+  } catch (error) {
     console.error('Error:', error);
-  })
-	mop.current.style.paddingTop = "56.25%"
-	setM3u8Url(null)
-	setEpisodeId(episodeId)
-	console.log(episodeId,dub)
+  }
+
+  if (mop.current) {
+    mop.current.style.paddingTop = "56.25%";
+  }
+
+  setM3u8Url(null);
+  setEpisodeId(episodeId);
+  console.log(episodeId, dub);
+
   if (!frm.current) return;
 
   const iframe = frm.current;
-
-  const mainUrl = dub
+  iframe.src = dub
     ? `https://megaplay.buzz/stream/s-2/${episodeId}/dub`
     : `https://megaplay.buzz/stream/s-2/${episodeId}/sub`;
-  iframe.src = mainUrl;
 };
 
 
