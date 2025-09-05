@@ -381,18 +381,39 @@ const EpisodeBrowser = ({
 
 
 {
-servers && servers.map((server, index)=>(
-	<button style={{
-          ...buttonStyle,
-          ...(hoverFallback ? buttonHoverStyle : {})
-        }}
-        onMouseEnter={() => setHoverFallback(true)}
-        onMouseLeave={() => setHoverFallback(false)} onClick={() => changeSource(episodeId,true)}>
-  			Use server {server.name) (server.type)
-	</button>
-))
-	
+  (servers && servers.sub) && servers.sub.map((server, index) => (
+    <button
+      key={index}
+      style={{
+        ...buttonStyle,
+        ...(hoverFallback ? buttonHoverStyle : {}),
+      }}
+      onMouseEnter={() => setHoverFallback(true)}
+      onMouseLeave={() => setHoverFallback(false)}
+      onClick={() => changeSource(episodeId, true)}
+    >
+      Use server {server.name} ({server.type})
+    </button>
+  ))
 }
+
+{
+  (servers && servers.dub) && servers.dub.map((server, index) => (
+    <button
+      key={index}
+      style={{
+        ...buttonStyle,
+        ...(hoverFallback ? buttonHoverStyle : {}),
+      }}
+      onMouseEnter={() => setHoverFallback(true)}
+      onMouseLeave={() => setHoverFallback(false)}
+      onClick={() => changeSource(episodeId, true)}
+    >
+      Use server {server.name} ({server.type})
+    </button>
+  ))
+}
+
       </div>
       <div>
       <div style={{display:'flex',justifyContent:'center'}}>
