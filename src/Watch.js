@@ -32,13 +32,14 @@ const VideoPlayer = React.memo(({ m3u8Url, tracks = [] }) => {
   const hlsRef = useRef(null);
 // Function to enable a specific track when clicked
   const activateTrack = (index) => {
-    const video = videoRef.current;
-    if (!video) return;
+  const plyr = plyrRef.current;
+  if (!plyr) return;
 
-    for (let i = 0; i < video.textTracks.length; i++) {
-      video.textTracks[i].mode = i === index ? 'showing' : 'disabled';
-    }
-  };
+  // Plyr captions tracks are zero-indexed
+  plyr.captions.current = index;
+  plyr.captions.show = true;
+};
+
   useEffect(() => {
     const video = videoRef.current;
 
