@@ -28,51 +28,50 @@ const [m3u8Url,setM3u8Url] = useState(null)
 }
 const VideoPlayer = ({ m3u8Url, tracks = [] }) => {
   const videoRef = useRef(null);
-  const plyrRef = useRef(null); // For Plyr instance
-  const hlsRef = useRef(null);  // To clean up HLS
+  const plyrRef = useRef(null);
+  const hlsRef = useRef(null);
 
   useEffect(() => {
-    let hls;
+    const video = videoRef.current;
 
-    if (videoRef.current) {
-      // HLS setup
-      if (Hls.isSupported()) {
-        hls = new Hls();
-        hls.loadSource(m3u8Url);
-        hls.attachMedia(videoRef.current);
+    if (!video) return;
 
-        hls.on(Hls.Events.ERROR, (event, data) => {
-          if (data.fatal) {
-            console.error('HLS.js error:', data);
-          }
-        });
-
-        hlsRef.current = hls;
-      } else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
-        videoRef.current.src = m3u8Url;
-      }
-
-      // Plyr setup (destroy if already exists)
-      if (plyrRef.current) {
-        plyrRef.current.destroy();
-        plyrRef.current = null;
-      }
-
-      plyrRef.current = new Plyr(videoRef.current, {
-        controls: [
-          'play',
-          'progress',
-          'current-time',
-          'mute',
-          'volume',
-          'settings',
-          'fullscreen',
-        ],
-      });
+    // Clean up old Plyr instance
+    if (plyrRef.current) {
+      plyrRef.current.destroy();
+      plyrRef.current = null;
     }
 
+    // Clean up old HLS instance
+    if (hlsRef.current) {
+      hlsRef.current.destroy();
+      hlsRef.current = null;
+    }
+
+    // HLS setup
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(m3u8Url);
+      hls.attachMedia(video);
+      hlsRef.current = hls;
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = m3u8Url;
+    }
+
+    // Initialize Plyr AFTER video and tracks are in DOM
+    setTimeout(() => {
+      plyrRef.current = new Plyr(video, {
+        captions: { active: true, update: true, language: 'en' },
+        controls: [
+          'play', 'progress', 'current-time',
+          'mute', 'volume', 'captions',
+          'settings', 'fullscreen'
+        ]
+      });
+    }, 0);
+
+    // Cleanup on unmount
     return () => {
-      // Cleanup
       if (plyrRef.current) {
         plyrRef.current.destroy();
         plyrRef.current = null;
@@ -82,33 +81,32 @@ const VideoPlayer = ({ m3u8Url, tracks = [] }) => {
         hlsRef.current = null;
       }
     };
-  }, [m3u8Url, tracks]); // Re-run when subtitles/tracks change
+  }, [m3u8Url, tracks]);
 
   return (
     <div style={{ height: '100%' }}>
       <video
         ref={videoRef}
         controls
-        style={{ height: '100%', width: '100%' }}
-        playsInline
         crossOrigin="anonymous"
+        playsInline
+        style={{ width: '100%', height: '100%' }}
       >
         <source src={m3u8Url} type="application/x-mpegURL" />
         {tracks.map((track, index) => (
           <track
             key={index}
             src={track.file}
-            kind={track.kind}
-            label={track.label || undefined}
-            default={track.default || undefined}
-            srcLang={track.srcLang || undefined}
+            kind={track.kind || 'subtitles'}
+            label={track.label || `Track ${index + 1}`}
+            srcLang={track.srcLang || 'en'}
+            default={track.default || false}
           />
         ))}
       </video>
     </div>
   );
 };
-
 const [hover, setHover] = useState(false);
   const [hoverFallback, setHoverFallback] = useState(false);
 	const buttonStyle = {
@@ -537,7 +535,7 @@ const EpisodeBrowser = ({
       <div style={{display:'flex',justifyContent:'center'}}>
      <div ref={mop} id="mop">
 	  {m3u8Url
-  ? <VideoPlayer m3u8Url={m3u8Url} />
+  ? <VideoPlayer m3u8Url={m3u8Url} tracks={tracks} />
   : <iframe
 src={iframeSrc} // <-- controlled via React
       ref={frm}
