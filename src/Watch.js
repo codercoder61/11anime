@@ -584,10 +584,7 @@ src={iframeSrc} // <-- controlled via React
   selectedEpisode={selectedEpisode}
   setSelectedEpisode={setSelectedEpisode}
   changeSource={changeSource} />
- <div
-  id='gl'
->
-	   <div>
+	  <div>
         
 					
 <div style={{margin:'10px 65px'}}>
@@ -634,6 +631,10 @@ src={iframeSrc} // <-- controlled via React
 }
 	  </div>
       </div>
+ <div
+  id='gl'
+>
+	   
 <div>
 <img id='kol' src={animeData && animeData.poster}/>
 </div>
