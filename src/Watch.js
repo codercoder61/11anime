@@ -14,7 +14,7 @@ const [m3u8Url,setM3u8Url] = useState(null)
     })
     .then(response => {
       console.log('Response:', response);
-		setM3u8Url(response.data.sources[0].file)
+		setM3u8Url("https://zuhaw-proxy.fly.dev/?url="+response.data.sources[0].file)
     })
     .catch(error => {
       console.error('Error:', error);
