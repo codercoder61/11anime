@@ -138,7 +138,7 @@ useEffect(() => {
       console.error('Error:', error);
     });
 }, [animeId]);
-
+const [servers,setServers] = useState([])
 
 useEffect(()=>{
   axios
@@ -150,7 +150,18 @@ useEffect(()=>{
     setAnimeEpisodes(response.data.episodes.sort((a, b) => a.number - b.number))
     let episodeId = response.data.episodes[0].id
     changeSource(episodeId)
+	axios
+  .get('https://hianimeapi-09b09f8b1d48.herokuapp.com/episodeServers', {
+    params: { episodeId }
+  })
+  .then(response => {
+    console.log('Response:', response);
+   	setServers(response.data)
 	
+      })
+  .catch(error => {
+    console.error('Error:', error);
+  })
       })
   .catch(error => {
     console.error('Error:', error);
@@ -166,7 +177,6 @@ const changeSource = async (episodeId, dub = false) => {
   const mainUrl = dub
     ? `https://megaplay.buzz/stream/s-2/${episodeId}/dub`
     : `https://megaplay.buzz/stream/s-2/${episodeId}/sub`;
-
   iframe.src = mainUrl;
 };
 
