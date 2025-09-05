@@ -6,6 +6,65 @@ import { useNavigate } from 'react-router-dom';
 import Plyr from 'plyr';
 import Hls from 'hls.js';
 function Watch() {
+const [m3u8Url,setM3u8Url] = useState(null)
+	const VideoPlayer = ({ m3u8Url }) => {
+  const videoRef = useRef(null);
+const getEpisodeSource = (serverId)=>{
+	axios
+    .get('https://hianimeapi-09b09f8b1d48.herokuapp.com/episodeSources', {
+      params: { serverId }
+    })
+    .then(response => {
+      console.log('Response:', response);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+  useEffect(() => {
+    let hls;
+
+    // Check if HLS.js is supported by the browser
+    if (Hls.isSupported()) {
+      hls = new Hls();
+
+      // Bind HLS to the video element and load the m3u8 URL
+      hls.loadSource(m3u8Url);
+      hls.attachMedia(videoRef.current);
+
+      // Handle errors
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        if (data.fatal) {
+          console.error('HLS.js error:', data);
+        }
+      });
+    }
+    // Fallback to native HLS support (for Safari)
+    else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
+      videoRef.current.src = m3u8Url;
+    }
+
+    // Clean up on component unmount
+    return () => {
+      if (hls) {
+        hls.destroy();
+      }
+    };
+  }, [m3u8Url]);
+
+  return (
+    <div>
+      <video
+        ref={videoRef}
+        controls
+        width="100%"
+        height="auto"
+        style={{ background: '#000' }}
+      />
+    </div>
+  );
+};
+
 const [hover, setHover] = useState(false);
   const [hoverFallback, setHoverFallback] = useState(false);
 	const buttonStyle = {
@@ -386,7 +445,7 @@ const EpisodeBrowser = ({
         ...buttonStyle,
       }}
       key={index}
-      onClick={() => changeSource(episodeId, true)}
+      onClick={() => getEpisodeSource(server.id)}
     >
       Use server {server.name} ({server.type})
     </button>
@@ -400,7 +459,7 @@ const EpisodeBrowser = ({
 	style={{
         ...buttonStyle,
       }}
-      onClick={() => changeSource(episodeId, true)}
+      onClick={() => getEpisodeSource(server.id)}
     >
       Use server {server.name} ({server.type})
     </button>
