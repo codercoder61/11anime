@@ -149,7 +149,7 @@ useEffect(()=>{
     console.log('Response:', response);
     setAnimeEpisodes(response.data.episodes.sort((a, b) => a.number - b.number))
     let episodeId = response.data.episodes[0].id
-    changeSource(episodeId)
+    //changeSource(episodeId)
 	axios
   .get('https://hianimeapi-09b09f8b1d48.herokuapp.com/episodeServers', {
     params: { episodeId }
