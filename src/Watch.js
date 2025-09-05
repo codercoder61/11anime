@@ -26,13 +26,85 @@ const [m3u8Url,setM3u8Url] = useState(null)
       console.error('Error:', error);
     });
 }
-const VideoPlayer = React.memo(({ m3u8Url, tracks = [] }) => { const videoRef = useRef(null); const plyrRef = useRef(null); const hlsRef = useRef(null); // Function to enable a specific track when clicked 
-useEffect(() => { const video = videoRef.current; if (!video) return; // Clean up old Plyr instance 
-																																																																								if (plyrRef.current) { plyrRef.current.destroy(); plyrRef.current = null; } // Clean up old HLS instance 
-																																																																								if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null; } // HLS setup 
-																																																																								if (Hls.isSupported()) { const hls = new Hls(); hls.loadSource(m3u8Url); hls.attachMedia(video); hlsRef.current = hls; } else if (video.canPlayType('application/vnd.apple.mpegurl')) { video.src = m3u8Url; } // Initialize Plyr 
-																																																																								setTimeout(() => { plyrRef.current = new Plyr(video, { captions: { active: true, update: true, language: 'en' }, controls: [ 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen' ] }); }, 0); // Cleanup 
-																																																																								return () => { if (plyrRef.current) { plyrRef.current.destroy(); plyrRef.current = null; } if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null; } }; }, [m3u8Url, tracks]); return ( <div style={{ height: '100%' }}> <video ref={videoRef} controls crossOrigin="anonymous" playsInline style={{ width: '100%', height: '100%' }} > <source src={m3u8Url} type="application/x-mpegURL" /> {tracks.map((track, index) => ( <track key={index} src={track.file} kind={track.kind || 'subtitles'} label={track.label || Track ${index + 1}} srcLang={track.srcLang || 'en'} default={track.default || false} /> ))} </video>  ); });
+const VideoPlayer = React.memo(({ m3u8Url, tracks = [] }) => {
+  const videoRef = useRef(null);
+  const plyrRef = useRef(null);
+  const hlsRef = useRef(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Clean up previous instances
+    if (plyrRef.current) {
+      plyrRef.current.destroy();
+      plyrRef.current = null;
+    }
+    if (hlsRef.current) {
+      hlsRef.current.destroy();
+      hlsRef.current = null;
+    }
+
+    // Initialize HLS.js or fallback to native HLS
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(m3u8Url);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        // Now that HLS is ready, initialize Plyr
+        plyrRef.current = new Plyr(video, {
+          captions: { active: true, update: true, language: 'en' },
+          controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen'],
+        });
+      });
+      hlsRef.current = hls;
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      // For Safari or native HLS browsers
+      video.src = m3u8Url;
+      video.addEventListener('loadedmetadata', () => {
+        plyrRef.current = new Plyr(video, {
+          captions: { active: true, update: true, language: 'en' },
+          controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen'],
+        });
+      });
+    }
+
+    return () => {
+      // Cleanup on unmount or before re-run
+      if (plyrRef.current) {
+        plyrRef.current.destroy();
+        plyrRef.current = null;
+      }
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+    };
+  }, [m3u8Url]);
+
+  return (
+    <div style={{ height: '100%' }}>
+      <video
+        ref={videoRef}
+        controls
+        crossOrigin="anonymous"
+        playsInline
+        style={{ width: '100%', height: '100%' }}
+      >
+        {tracks.map((track, index) => (
+          <track
+            key={index}
+            src={track.file}
+            kind={track.kind || 'subtitles'}
+            label={track.label || `Track ${index + 1}`}
+            srcLang={track.srcLang || 'en'}
+            default={track.default || false}
+          />
+        ))}
+      </video>
+    </div>
+  );
+});
 const [hover, setHover] = useState(false);
   const [hoverFallback, setHoverFallback] = useState(false);
 	const buttonStyle = {
