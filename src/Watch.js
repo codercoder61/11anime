@@ -603,24 +603,24 @@ src={iframeSrc} // <-- controlled via React
     </div>
 </div>
 					 <div style={{margin:'10px auto',width:'60%'}}>
-					 <div style={{display:'flex',alignItem:'center',justifyContent:"center"}}>
-						 <span>Iframe :</span>
+					 <div style={{display:'flex',alignItems:'center',justifyContent:"center"}}>
+						 <span style={{color:"#fff"}}>Iframe :</span>
 						<button style={{
 					        ...buttonStyle,
 					      }}
 										 onClick={() => changeSource(episodeId,false)}>
-					  			Use (sub)
+					  			SUB
 						</button>
 						 
 						<button style={{
 					        ...buttonStyle,
 					      }}
 										 onClick={() => changeSource(episodeId,true)}>
-					  			Use Fallback (Dub)
+					  			DUB
 						</button>
 					 </div>
  
-<div style={{display:'flex',alignItem:'center',justifyContent:"center"}}><span>SUB:</span>
+<div style={{display:'flex',alignItems:'center',justifyContent:"center"}}><span style={{color:"#fff"}}>SUB:</span>
 {
   (servers && servers.sub) && servers.sub.map((server, index) => (
     <button
@@ -630,11 +630,11 @@ src={iframeSrc} // <-- controlled via React
       key={index}
       onClick={() => getEpisodeSource(server.id)}
     >
-      Use server {server.name} ({server.type})
+      {server.name}
     </button>
   ))
 }</div>
-<div style={{display:'flex',alignItem:'center',justifyContent:"center"}}><span>DUB:</span>
+<div style={{display:'flex',alignItems:'center',justifyContent:"center"}}><span style={{color:"#fff"}}>DUB:</span>
 
 {
   (servers && servers.dub) && servers.dub.map((server, index) => (
@@ -645,7 +645,7 @@ src={iframeSrc} // <-- controlled via React
       }}
       onClick={() => getEpisodeSource(server.id)}
     >
-      Use server {server.name} ({server.type})
+      {server.name}
     </button>
   ))
 }</div>
