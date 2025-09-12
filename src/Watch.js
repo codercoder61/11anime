@@ -602,7 +602,7 @@ src={iframeSrc} // <-- controlled via React
 
     </div>
 </div>
-					 <div style={{margin:'10px auto',width:'60%'}}>
+					 <div style={{margin:'10px auto',width:'100%'}}>
 					 <div style={{display:'flex',alignItems:'center',justifyContent:"center"}}>
 						 <span style={{color:"#fff",fontWeight:"bold"}}>IFRAME :</span>
 						<button style={{
