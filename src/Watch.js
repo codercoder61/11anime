@@ -604,7 +604,7 @@ src={iframeSrc} // <-- controlled via React
 </div>
 					 <div style={{margin:'10px auto',width:'60%'}}>
 					 <div style={{display:'flex',alignItems:'center',justifyContent:"center"}}>
-						 <span style={{color:"#fff"}}>Iframe :</span>
+						 <span style={{color:"#fff",fontWeight:"bold"}}>IFRAME :</span>
 						<button style={{
 					        ...buttonStyle,
 					      }}
@@ -620,7 +620,7 @@ src={iframeSrc} // <-- controlled via React
 						</button>
 					 </div>
  
-<div style={{display:'flex',alignItems:'center',justifyContent:"center"}}><span style={{color:"#fff"}}>SUB:</span>
+<div style={{display:'flex',alignItems:'center',justifyContent:"center"}}><span style={{color:"#fff",fontWeight:"bold"}}>SUB:</span>
 {
   (servers && servers.sub) && servers.sub.map((server, index) => (
     <button
@@ -634,7 +634,7 @@ src={iframeSrc} // <-- controlled via React
     </button>
   ))
 }</div>
-<div style={{display:'flex',alignItems:'center',justifyContent:"center"}}><span style={{color:"#fff"}}>DUB:</span>
+<div style={{display:'flex',alignItems:'center',justifyContent:"center"}}><span style={{color:"#fff",fontWeight:"bold"}}>DUB:</span>
 
 {
   (servers && servers.dub) && servers.dub.map((server, index) => (
