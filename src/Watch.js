@@ -138,7 +138,7 @@ const [hover, setHover] = useState(false);
   backgroundColor: '#5a2e98',
   outline: 'none',
   border: 'none',
-  padding: '10px 20px',
+  padding: '5px',
   borderRadius: '15px',
   boxShadow: '0 0 5px grey',
   fontSize: '1.1em',
