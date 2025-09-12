@@ -603,20 +603,24 @@ src={iframeSrc} // <-- controlled via React
     </div>
 </div>
 					 <div style={{margin:'10px auto',width:'60%'}}>
- <button style={{
-        ...buttonStyle,
-      }}
-					 onClick={() => changeSource(episodeId,false)}>
-  			Use (sub)
-	</button>
-					 
-	<button style={{
-        ...buttonStyle,
-      }}
-					 onClick={() => changeSource(episodeId,true)}>
-  			Use Fallback (Dub)
-	</button>
-
+					 <div style={{display:'flex',alignItem:'center',justifyContent:"center"}}>
+						 <span>Iframe :</span>
+						<button style={{
+					        ...buttonStyle,
+					      }}
+										 onClick={() => changeSource(episodeId,false)}>
+					  			Use (sub)
+						</button>
+						 
+						<button style={{
+					        ...buttonStyle,
+					      }}
+										 onClick={() => changeSource(episodeId,true)}>
+					  			Use Fallback (Dub)
+						</button>
+					 </div>
+ 
+<div style={{display:'flex',alignItem:'center',justifyContent:"center"}}><span>SUB:</span>
 {
   (servers && servers.sub) && servers.sub.map((server, index) => (
     <button
@@ -629,7 +633,8 @@ src={iframeSrc} // <-- controlled via React
       Use server {server.name} ({server.type})
     </button>
   ))
-}
+}</div>
+<div style={{display:'flex',alignItem:'center',justifyContent:"center"}}><span>DUB:</span>
 
 {
   (servers && servers.dub) && servers.dub.map((server, index) => (
@@ -643,7 +648,7 @@ src={iframeSrc} // <-- controlled via React
       Use server {server.name} ({server.type})
     </button>
   ))
-}
+}</div>
 	  </div>
       </div>
 <EpisodeBrowser episodes={animeEpisodes}
