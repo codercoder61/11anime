@@ -299,7 +299,7 @@ select{
 .filter-form select:focus {
   border-color: #5a2e98;
   outline: none;
-  box-shadow: 0 0 5px rgba(90, 46, 152, 0.4);
+  box-shadow: 0 0 5px #222;
 }
 
 .filter-form button {
