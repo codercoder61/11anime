@@ -6,11 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import Plyr from 'plyr';
 import Hls from 'hls.js';
 function Watch() {
-	const [iframeSrc, setIframeSrc] = useState(null);
-const [tracks,setTracks]=useState([])
-
-	const mop = useRef(null);
-const [m3u8Url,setM3u8Url] = useState(null)
 	const getEpisodeSource = (serverId)=>{
 		mop.current.style.paddingTop = "unset"
 	axios
@@ -26,6 +21,12 @@ const [m3u8Url,setM3u8Url] = useState(null)
       console.error('Error:', error);
     });
 }
+	const [iframeSrc, setIframeSrc] = useState(null);
+const [tracks,setTracks]=useState([])
+
+	const mop = useRef(null);
+const [m3u8Url,setM3u8Url] = useState(null)
+	
 const VideoPlayer = React.memo(({ m3u8Url, tracks = [] }) => {
   const videoRef = useRef(null);
   const plyrRef = useRef(null);
@@ -150,21 +151,24 @@ if (hlsRef.current) {
   const navigate = useNavigate();
   const frm = useRef(null);
   const [searchParams] = useSearchParams();
-  const player = new Plyr('#player', {
-    captions: { active: true, update: true }
-  });
-	const trackNode = player.captions.currentTrackNode; // <track> element
+  useEffect(() => {
+  const player = new Plyr('#player', { captions: { active: true, update: true } });
+  const trackNode = player.captions.currentTrackNode;
 
-if (trackNode) {
-  // Find the matching TextTrack
-  const textTrack = Array.from(player.textTracks).find(
-    t => t.language === trackNode.srclang
-  );
+  if (trackNode) {
+    const textTrack = Array.from(player.textTracks).find(
+      t => t.language === trackNode.srclang
+    );
 
-  if (textTrack && (!textTrack.activeCues || textTrack.mode !== 'showing')) {
-    textTrack.mode = 'showing';
+    if (textTrack && (!textTrack.activeCues || textTrack.mode !== 'showing')) {
+      textTrack.mode = 'showing';
+    }
   }
-}
+
+  return () => {
+    player.destroy();
+  };
+}, []);
 
 
   //const player = videojs('my-video');
