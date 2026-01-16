@@ -254,34 +254,6 @@ useEffect(() => {
     });
 }, [animeId]);
 const [servers,setServers] = useState([])
-
-useEffect(()=>{
-  axios
-  .get('https://could-harold-awarded-patio.trycloudflare.com/episodes', {
-    params: { dataId }
-  })
-  .then(response => {
-    //('Response:', response);
-    setAnimeEpisodes(response.data.episodes.sort((a, b) => a.number - b.number))
-    let episodeId = response.data.episodes[0].id
-    changeSource(episodeId)
-	axios
-  .get('https://could-harold-awarded-patio.trycloudflare.com/episodeServers', {
-    params: { episodeId }
-  })
-  .then(response => {
-    //('Response:', response);
-   	setServers(response.data)
-	
-      })
-  .catch(error => {
-    console.error('Error:', error);
-  })
-      })
-  .catch(error => {
-    console.error('Error:', error);
-  })
-},[dataId])
 const changeSource = async (episodeId, dub = false) => {
   try {
     const response = await axios.get(
@@ -309,6 +281,34 @@ const changeSource = async (episodeId, dub = false) => {
 
 setIframeSrc(newSrc); // <-- use state instead of ref
 };
+useEffect(()=>{
+  axios
+  .get('https://could-harold-awarded-patio.trycloudflare.com/episodes', {
+    params: { dataId }
+  })
+  .then(response => {
+    //('Response:', response);
+    setAnimeEpisodes(response.data.episodes.sort((a, b) => a.number - b.number))
+    let episodeId = response.data.episodes[0].id
+    changeSource(episodeId)
+	axios
+  .get('https://could-harold-awarded-patio.trycloudflare.com/episodeServers', {
+    params: { episodeId }
+  })
+  .then(response => {
+    //('Response:', response);
+   	setServers(response.data)
+	
+      })
+  .catch(error => {
+    console.error('Error:', error);
+  })
+      })
+  .catch(error => {
+    console.error('Error:', error);
+  })
+},[dataId])
+
 
 
 
