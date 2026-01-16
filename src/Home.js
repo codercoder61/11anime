@@ -1,10 +1,9 @@
-import React,{useRef,useState,useEffect} from 'react'
+import React,{useRef,useState,useEffect,useCallback } from 'react'
 import './Home.css'
 import axios from 'axios'
 import { useSearchParams,useNavigate,Link } from 'react-router-dom';
 function Home() {
    const navigate = useNavigate();
-  const bars = useRef(null)
   const ress= useRef(null)
   const slideshow = useRef(null)
   const all = useRef(null)
@@ -19,6 +18,7 @@ const [statuse,setStatuse1] = useState('')
 
 
 
+const [currentItems, setCurrentItems] = useState([]);
 
 
 
@@ -49,7 +49,7 @@ const [searchParams] = useSearchParams();
       const { data } = await axios.get('https://could-harold-awarded-patio.trycloudflare.com/search', {
         params: { keyword: search },
       });
-      console.log(data)
+      //(data)
       const results = data?.animeList || [];
       setResults(results);
       if(ress.current)
@@ -79,72 +79,93 @@ const [searchParams] = useSearchParams();
   
   const [duration,setDuration]=useState('')
   const [genres,setGenres]=useState('')
-  const [numberOfEpisodes,setnumberOfEpisodes]=useState('')
   const [producers,setProducers]=useState('')
-  const [released,setReleased]=useState('')
-  const [season,setSeason]=useState('')
   const [statuss,setStatuss]=useState('')
   const [studio,setStudio]=useState('')
   const [synopsis,setSynopsis]=useState('')
-  const [updatedOn,setUpdatedOn]=useState('')
-  const [tv,setTv]=useState('')
 
-  const [isHovered,setIsHovered] = useState(false)
   const [isSignIn,setIsSignIn] = useState(false)
   const [isSignUp,setIsSignUp] = useState(false)
   const [allState,setAllState] = useState(false)
-  let slideIndex = 1;
   const [hoveredIndex, setHoveredIndex] = useState(null);
 const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
-const tooltipRef = useRef(null);
-
 const [currentPage, setCurrentPage] = useState(1);
 const itemsPerPage = 8; // adjust as needed
+let slideIndex = 1; // mutable, persists across renders
+
 function plusSlides(n) {
-  showSlides(slideIndex += n);
+  slideIndex += n;  
+  showSlides(slideIndex); // pass current value to showSlides
 }
 
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
 
-function showSlides(n) {
-  let i;
-  let slides = document.getElementsByClassName("mySlides");
-  
-  if (n > slides.length) {slideIndex = 1}    
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";  
+
+
+const showSlides = useCallback((n) => {
+  let slideIndex = n; // local variable
+  const slides = document.getElementsByClassName("mySlides");
+  if (!slides || slides.length === 0) return;
+
+  if (slideIndex > slides.length) slideIndex = 1;
+  else if (slideIndex < 1) slideIndex = slides.length;
+
+  for (let i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
   }
 
-  slides[slideIndex-1].style.display = "block";  
-}
-  const fetchData = async (url) => {
-    await axios.get(url).then(dataa=>{
-      console.log(dataa)
-    }).catch(error=>{
-        console.log(error)
-    });
-      
-    
-  };
+  const currentSlide = slides[slideIndex - 1];
+  if (currentSlide) currentSlide.style.display = "block";
+}, []);
+
+
+  
   document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed');
+    //('DOM fully loaded and parsed');
 });
 
-   useEffect(() => {
-    // Call your function once the component is mounted
-    if (slideshow.current) {
-      showSlides(slideIndex);
-    }
-  }, []); // empty deps: run once on mount
+useEffect(() => {
+  if (slideshow.current) {
+    showSlides(slideIndex);
+  }
+}, [slideIndex, showSlides]); // slideIndex ref object is stable, safe to include
+
   const [recUpd,setRecUpd] = useState([])
 const indexOfLastItem = currentPage * itemsPerPage;
 const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-let currentItems = recUpd?.slice(indexOfFirstItem, indexOfLastItem) || [];
+useEffect(() => {
+  setCurrentItems(recUpd?.slice(indexOfFirstItem, indexOfLastItem) || []);
+}, [recUpd, indexOfFirstItem, indexOfLastItem]);
 const totalPages = Math.ceil((recUpd?.length || 0) / itemsPerPage);
+   const handleClick = useCallback(async (show) => {
+  setCurrentPage(1);
+  setLoading2(true);
+  setRecUpd(null);
+  
+  if (ti.current) {
+    ti.current.textContent = show ? 'Letter ' + show : 'All';
+  }
+
+  // Smooth scroll to anchor
+  const anchor = document.getElementById("ancre");
+  if (anchor) anchor.scrollIntoView({ behavior: "smooth" });
+
+  try {
+    const response = await axios.get(`https://could-harold-awarded-patio.trycloudflare.com/search?keyword=${show}`);
+    //('Response:', response);
+
+    const newData = response.data.animeList || [];
+    setRecUpd(newData);
+
+    // Update currentItems using state
+    setCurrentItems(newData.slice(indexOfFirstItem, indexOfLastItem));
+
+  } catch (error) {
+    console.error('Error:', error);
+  } finally {
+    setLoading2(false);
+  }
+}, [indexOfFirstItem, indexOfLastItem]);
    useEffect(() => {
     const fetchData = async (page=1) => {
       try {
@@ -152,7 +173,7 @@ const totalPages = Math.ceil((recUpd?.length || 0) / itemsPerPage);
         const response = await axios.get(`https://could-harold-awarded-patio.trycloudflare.com/?category=tv&page=${page}`, {
       type:'tv',
     })
-        console.log(response)
+        //(response)
         setRecUpd(response.data.animeList)
         setLoading2(false)
       } catch (error) {
@@ -175,7 +196,7 @@ setLoading2(true)
     }
   })
     .then(response => {
-      console.log('Response:', response);
+      //('Response:', response);
       ti.current.textContent = 'Filtered Anime'
       setRecUpd(response.data?.animeList || []);
         setLoading2(false)
@@ -188,14 +209,11 @@ setLoading2(true)
     else{
     fetchData();
     }
-  }, [letter,genree1,typee1,statuse1]);
+  }, [handleClick,letter,genree1,typee1,statuse1]);
   
 
 
-    const [genre, setGenre] = useState('');
-  const [type, setType] = useState('');
-  const [order, setOrder] = useState('');
-  const [status, setStatus] = useState('');
+    
 const handleSubmit = (e) => {
   e.preventDefault(); // Prevent form submission
 
@@ -214,7 +232,7 @@ const handleSubmit = (e) => {
   },
 })
   .then(response => {
-    console.log('Response:', response);
+    //('Response:', response);
     ti.current.textContent = 'Filtered Anime'; // Update the title or display message
     setRecUpd(response.data?.animeList || []);  // Update state with the filtered list
     setLoading2(false); // Stop loading spinner or indicator
@@ -225,31 +243,9 @@ const handleSubmit = (e) => {
   });
 };
 
-   const handleClick = (show) => {
-setCurrentPage(1)
-        setLoading2(true)
 
-    window.location.href="#ancre"
-  setRecUpd(null);
-    ti.current.textContent = show ? 'Letter ' + show : 'All' ;
 
-  axios.get(`https://could-harold-awarded-patio.trycloudflare.com/search?keyword=${show}`)
-  .then(response => {
-    console.log('Response:', response);
-    const newData = response.data.animeList || [];
-  setRecUpd(newData);
-  currentItems = newData.slice(indexOfFirstItem, indexOfLastItem);
-  setLoading2(false);
 
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-};
-
-useEffect(() => {
-  currentItems = recUpd?.slice(indexOfFirstItem, indexOfLastItem) || [];
-}, [recUpd, indexOfFirstItem, indexOfLastItem]);
 
   function Pagination({ currentPage, totalPages, onPageChange }) {
   const pageNeighbours = 1; // how many pages to show on each side of current page
@@ -367,7 +363,6 @@ const handleMouseEnter = (animeId, index) => {
   setStatuss("");
   setProducers("");
   setHoveredIndex(null);
-  setnumberOfEpisodes("");
   setDuration("");
   setGenres("");
   const rect = refs.current[index].getBoundingClientRect();
@@ -393,7 +388,7 @@ setLoading(true);
     params: { animeId }
   })
   .then(response => {
-    console.log('Response:', response);
+    //('Response:', response);
     // You can store details if needed
 
 
@@ -423,7 +418,7 @@ setLoading(true);
       {allState && <div ref={all} className='all'></div>}
       {isSignIn && <div className='register'>
         <i onClick={()=>{setAllState(false);setIsSignIn(false)}} style={{cursor:'pointer',position:'absolute',right:'10px',top:'10px'}} className="fa-solid fa-xmark"></i>
-        <div><img style={{position:'relative',right:'20px',width:'250px'}} src='https://9animetv.to/images/icon-login2.png'/></div>
+        <div><img alt="2"style={{position:'relative',right:'20px',width:'250px'}} src='https://9animetv.to/images/icon-login2.png'/></div>
         <div style={{height:'auto',display:'flex',flexDirection:'column',justifyContent:'space-between'}}>
           <h1 style={{color:'#5a2e98',textAlign:'center'}}>Member Login</h1>
           <p style={{textAlign:'center'}}>11anime - a better place to watch anime online for free!</p>
@@ -445,7 +440,7 @@ setLoading(true);
       </div>}
       {isSignUp && <div className='register'>
         <i onClick={()=>{setAllState(false);setIsSignUp(false)}} style={{cursor:'pointer',position:'absolute',right:'10px',top:'10px'}} className="fa-solid fa-xmark"></i>
-        <div><img style={{position:'relative',right:'20px',width:'250px'}} src='https://9animetv.to/images/icon-register.png'/></div>
+        <div><img alt="3"style={{position:'relative',right:'20px',width:'250px'}} src='https://9animetv.to/images/icon-register.png'/></div>
         <div style={{height:'auto',display:'flex',flexDirection:'column',justifyContent:'space-between'}}>
           <h1 style={{color:'#5a2e98',textAlign:'center'}}>Register</h1>
           <p style={{textAlign:'center'}}>When becoming members of the site, you could use the full range of functions.</p>
@@ -485,7 +480,7 @@ setLoading(true);
             <div ref={ress} id='ress'>
               {results && results.map((elm,index)=>(
                 <Link to={`/watch?dataId=${elm.dataId}&animeId=${elm.animeId}`}><div key={index} style={{margin:'10px 0',display:'flex',alignItems:'center'}}>
-                  <div><img style={{objectFit:'cover',width:'50px',height:'50px',borderRadius:'50%'}} src={elm.poster}/></div>
+                  <div><img alt="4"style={{objectFit:'cover',width:'50px',height:'50px',borderRadius:'50%'}} src={elm.poster}/></div>
                   <div style={{marginLeft:'10px'}}>
                     <p>{elm.title}</p>
                   </div>
@@ -509,7 +504,7 @@ setLoading(true);
         <div className='fadeToBlack'></div>
         <Link to='/watch?dataId=2&animeId=hunter-x-hunter-2'><div  className="mySlides">
                 <div className="numbertext">1 / 5</div>
-                <img className="fade" src="https://worldofgeek.fr/wp-content/uploads/2025/07/hunter-x-hunter-nen-impact-1200x571.jpg" style={{width:'100%',minHeight:'300px',height:'200px',objectFit:'cover'}} />
+                <img alt="5"className="fade" src="https://worldofgeek.fr/wp-content/uploads/2025/07/hunter-x-hunter-nen-impact-1200x571.jpg" style={{width:'100%',minHeight:'300px',height:'200px',objectFit:'cover'}} />
                 <div style={{boxShadow:'0 0 5px white',zIndex:'50000',position:'relative',width:'auto',display:'flex',alignItems:'center',justifyContent:'center',backgroundColor:'#5a2e98'}}>
                   <div>
                 <div className="text noFade">Hunter x Hunter (2011)</div>
@@ -520,7 +515,7 @@ setLoading(true);
             </div></Link>
         <Link to='/watch?dataId=100&animeId=one-piece-100'><div  className="mySlides">
                 <div className="numbertext">2 / 5</div>
-                <img className="fade" src="https://cdna.artstation.com/p/assets/images/images/052/674/042/large/elix-asset.jpg?1660391448" style={{width:'100%',minHeight:'300px',height:'200px',objectFit:'cover'}} />
+                <img alt="6"className="fade" src="https://cdna.artstation.com/p/assets/images/images/052/674/042/large/elix-asset.jpg?1660391448" style={{width:'100%',minHeight:'300px',height:'200px',objectFit:'cover'}} />
                 <div style={{boxShadow:'0 0 5px white',zIndex:'50000',position:'relative',width:'auto',display:'flex',alignItems:'center',justifyContent:'center',backgroundColor:'#5a2e98'}}>
                   <div>
                 <div className="text noFade">One Piece</div>
@@ -531,7 +526,7 @@ setLoading(true);
         </div></Link>
         <Link to='/watch?dataId=112&animeId=attack-on-titan-112'><div  className="mySlides">
                 <div className="numbertext">3 / 5</div>
-                <img className="fade" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/9f2fcbc8-1efd-4a10-aa26-f4d8fbf53f35/d6n4i7m-6744e406-bb25-4556-b1c4-f5e7e2ee8a41.jpg/v1/fill/w_851,h_315,q_75,strp/shingeki_no_kyojin_facebook_banner_by_jondedy_d6n4i7m-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MzE1IiwicGF0aCI6IlwvZlwvOWYyZmNiYzgtMWVmZC00YTEwLWFhMjYtZjRkOGZiZjUzZjM1XC9kNm40aTdtLTY3NDRlNDA2LWJiMjUtNDU1Ni1iMWM0LWY1ZTdlMmVlOGE0MS5qcGciLCJ3aWR0aCI6Ijw9ODUxIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.jVDBOkhV_bxO2PVV0GnyP7sdvZdp_tYjpEsa1wZWcS8" style={{width:'100%',minHeight:'300px',height:'200px',objectFit:'cover'}} />
+                <img alt="7"className="fade" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/9f2fcbc8-1efd-4a10-aa26-f4d8fbf53f35/d6n4i7m-6744e406-bb25-4556-b1c4-f5e7e2ee8a41.jpg/v1/fill/w_851,h_315,q_75,strp/shingeki_no_kyojin_facebook_banner_by_jondedy_d6n4i7m-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MzE1IiwicGF0aCI6IlwvZlwvOWYyZmNiYzgtMWVmZC00YTEwLWFhMjYtZjRkOGZiZjUzZjM1XC9kNm40aTdtLTY3NDRlNDA2LWJiMjUtNDU1Ni1iMWM0LWY1ZTdlMmVlOGE0MS5qcGciLCJ3aWR0aCI6Ijw9ODUxIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.jVDBOkhV_bxO2PVV0GnyP7sdvZdp_tYjpEsa1wZWcS8" style={{width:'100%',minHeight:'300px',height:'200px',objectFit:'cover'}} />
 
                 <div style={{boxShadow:'0 0 5px white',zIndex:'50000',position:'relative',width:'auto',display:'flex',alignItems:'center',justifyContent:'center',backgroundColor:'#5a2e98'}}>
                   <div>
@@ -543,7 +538,7 @@ setLoading(true);
         </div></Link>
         <Link to='/watch?dataId=19413&animeId=solo-leveling-season-2-arise-from-the-shadow-19413'><div  className="mySlides">
                 <div className="numbertext">4 / 5</div>
-                <img className="fade" src="https://www.thathashtagshow.com/wp-content/uploads/2025/01/SoloLeveling_S2_KV1_16x9_3840x2160-1280x640.png" style={{width:'100%',minHeight:'300px',height:'200px',objectFit:'cover'}} />
+                <img alt="8"className="fade" src="https://www.thathashtagshow.com/wp-content/uploads/2025/01/SoloLeveling_S2_KV1_16x9_3840x2160-1280x640.png" style={{width:'100%',minHeight:'300px',height:'200px',objectFit:'cover'}} />
                 <div style={{boxShadow:'0 0 5px white',zIndex:'50000',position:'relative',width:'auto',display:'flex',alignItems:'center',justifyContent:'center',backgroundColor:'#5a2e98'}}>
                   <div>
                 <div className="text noFade">Solo Leveling Season 2: Arise from the Shadow (2025)</div>
@@ -554,7 +549,7 @@ setLoading(true);
         </div></Link>
         <Link to="/watch?dataId=677&animeId=naruto-677"><div  className="mySlides">
                 <div className="numbertext">5 / 5</div>
-                <img className="fade" src="https://static1.colliderimages.com/wordpress/wp-content/uploads/2025/02/naruto-header.jpg?q=70&fit=crop&w=1100&h=618&dpr=1" style={{width:'100%',minHeight:'300px',height:'200px',objectFit:'cover'}} />
+                <img alt="9"className="fade" src="https://static1.colliderimages.com/wordpress/wp-content/uploads/2025/02/naruto-header.jpg?q=70&fit=crop&w=1100&h=618&dpr=1" style={{width:'100%',minHeight:'300px',height:'200px',objectFit:'cover'}} />
                 <div style={{boxShadow:'0 0 5px white',zIndex:'50000',position:'relative',width:'auto',display:'flex',alignItems:'center',justifyContent:'center',backgroundColor:'#5a2e98'}}>
                   <div>
                 <div className="text noFade">Naruto (2002)</div>
@@ -565,8 +560,8 @@ setLoading(true);
 
                 
         </div></Link>
-        <a className="prev" onClick={()=>plusSlides(-1)}>❮</a>
-        <a className="next" onClick={()=>plusSlides(1)}>❯</a>
+        <button className="prev" onClick={()=>plusSlides(-1)}>❮</button>
+        <button className="next" onClick={()=>plusSlides(1)}>❯</button>
       </main>
 
 
@@ -761,7 +756,7 @@ setLoading(true);
     
     </div>
       <div style={{position:'relative',padding:'10px',backgroundColor:'#222',width:'100%',height:'fit-content',paddingBottom:'30px',marginTop:'50px'}}>
-        <img id='maga' src='https://9animetv.to/images/footer-icon.png'/>
+        <img alt="1"id='maga' src='https://9animetv.to/images/footer-icon.png'/>
           <p style={{color:'gray',marginLeft:'15px'}}>A-Z LIST   |   Searching anime order by alphabet name A to Z.</p>
           <div className='alphabet'>
             <span onClick={() => handleClick('')}>#</span>
