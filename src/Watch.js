@@ -9,7 +9,7 @@ function Watch() {
 	const getEpisodeSource = (serverId)=>{
 		mop.current.style.paddingTop = "unset"
 	axios
-    .get('http://localhost:3000/episodeSources', {
+    .get('https://could-harold-awarded-patio.trycloudflare.com/episodeSources', {
       params: { serverId }
     })
     .then(response => {
@@ -210,7 +210,7 @@ useEffect(() => {
   }
 
   try {
-    const { data } = await axios.get('http://localhost:3000/search', {
+    const { data } = await axios.get('https://could-harold-awarded-patio.trycloudflare.com/search', {
       params: { keyword: search },
     });
     //(data)
@@ -242,7 +242,7 @@ const handleClick = (show) => {
 
 useEffect(() => {
   axios
-    .get('http://localhost:3000/animeInfo', {
+    .get('https://could-harold-awarded-patio.trycloudflare.com/animeInfo', {
       params: { animeId }
     })
     .then(response => {
@@ -257,7 +257,7 @@ const [servers,setServers] = useState([])
 
 useEffect(()=>{
   axios
-  .get('http://localhost:3000/episodes', {
+  .get('https://could-harold-awarded-patio.trycloudflare.com/episodes', {
     params: { dataId }
   })
   .then(response => {
@@ -266,7 +266,7 @@ useEffect(()=>{
     let episodeId = response.data.episodes[0].id
     changeSource(episodeId)
 	axios
-  .get('http://localhost:3000/episodeServers', {
+  .get('https://could-harold-awarded-patio.trycloudflare.com/episodeServers', {
     params: { episodeId }
   })
   .then(response => {
@@ -285,7 +285,7 @@ useEffect(()=>{
 const changeSource = async (episodeId, dub = false) => {
   try {
     const response = await axios.get(
-      'http://localhost:3000/episodeServers',
+      'https://could-harold-awarded-patio.trycloudflare.com/episodeServers',
       { params: { episodeId } }
     );
     //('Response:', response);
