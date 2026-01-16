@@ -14,7 +14,7 @@ const [m3u8Url,setM3u8Url] = useState(null)
 	const getEpisodeSource = (serverId)=>{
 		mop.current.style.paddingTop = "unset"
 	axios
-    .get('https://hianimeapi-09b09f8b1d48.herokuapp.com/episodeSources', {
+    .get('https://could-harold-awarded-patio.trycloudflare.com/episodeSources', {
       params: { serverId }
     })
     .then(response => {
@@ -219,7 +219,7 @@ useEffect(() => {
   }
 
   try {
-    const { data } = await axios.get('https://hianimeapi-09b09f8b1d48.herokuapp.com/search', {
+    const { data } = await axios.get('https://could-harold-awarded-patio.trycloudflare.com/search', {
       params: { keyword: search },
     });
     console.log(data)
@@ -251,7 +251,7 @@ console.log("animeId:", animeId);  // Log the animeId value
 
 useEffect(() => {
   axios
-    .get('https://hianimeapi-09b09f8b1d48.herokuapp.com/animeInfo', {
+    .get('https://could-harold-awarded-patio.trycloudflare.com/animeInfo', {
       params: { animeId }
     })
     .then(response => {
@@ -266,7 +266,7 @@ const [servers,setServers] = useState([])
 
 useEffect(()=>{
   axios
-  .get('https://hianimeapi-09b09f8b1d48.herokuapp.com/episodes', {
+  .get('https://could-harold-awarded-patio.trycloudflare.com/episodes', {
     params: { dataId }
   })
   .then(response => {
@@ -275,7 +275,7 @@ useEffect(()=>{
     let episodeId = response.data.episodes[0].id
     changeSource(episodeId)
 	axios
-  .get('https://hianimeapi-09b09f8b1d48.herokuapp.com/episodeServers', {
+  .get('https://could-harold-awarded-patio.trycloudflare.com/episodeServers', {
     params: { episodeId }
   })
   .then(response => {
@@ -294,7 +294,7 @@ useEffect(()=>{
 const changeSource = async (episodeId, dub = false) => {
   try {
     const response = await axios.get(
-      'https://hianimeapi-09b09f8b1d48.herokuapp.com/episodeServers',
+      'https://could-harold-awarded-patio.trycloudflare.com/episodeServers',
       { params: { episodeId } }
     );
     console.log('Response:', response);
