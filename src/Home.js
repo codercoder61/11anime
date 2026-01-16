@@ -46,7 +46,7 @@ const [searchParams] = useSearchParams();
     }
   
     try {
-      const { data } = await axios.get('https://hianimeapi-09b09f8b1d48.herokuapp.com/search', {
+      const { data } = await axios.get('https://could-harold-awarded-patio.trycloudflare.com/search', {
         params: { keyword: search },
       });
       console.log(data)
@@ -149,7 +149,7 @@ const totalPages = Math.ceil((recUpd?.length || 0) / itemsPerPage);
     const fetchData = async (page=1) => {
       try {
          
-        const response = await axios.get(`https://hianimeapi-09b09f8b1d48.herokuapp.com/?category=tv&page=${page}`, {
+        const response = await axios.get(`https://could-harold-awarded-patio.trycloudflare.com/?category=tv&page=${page}`, {
       type:'tv',
     })
         console.log(response)
@@ -166,7 +166,7 @@ const totalPages = Math.ceil((recUpd?.length || 0) / itemsPerPage);
       {
 setLoading2(true)
 
-      axios.get('https://hianimeapi-09b09f8b1d48.herokuapp.com/filter', {
+      axios.get('https://could-harold-awarded-patio.trycloudflare.com/filter', {
     params: {
       genree: genree1,
       typee: typee1,
@@ -205,7 +205,7 @@ const handleSubmit = (e) => {
   setRecUpd(null);  // Clear previous filtered results
 
   // Make the API call with the filter parameters as query parameters
-  axios.get('https://hianimeapi-09b09f8b1d48.herokuapp.com/filter', {
+  axios.get('https://could-harold-awarded-patio.trycloudflare.com/filter', {
   params: {
     typee,
     statuse,
@@ -233,7 +233,7 @@ setCurrentPage(1)
   setRecUpd(null);
     ti.current.textContent = show ? 'Letter ' + show : 'All' ;
 
-  axios.get(`https://hianimeapi-09b09f8b1d48.herokuapp.com/search?keyword=${show}`)
+  axios.get(`https://could-harold-awarded-patio.trycloudflare.com/search?keyword=${show}`)
   .then(response => {
     console.log('Response:', response);
     const newData = response.data.animeList || [];
@@ -389,7 +389,7 @@ const handleMouseEnter = (animeId, index) => {
   setHoveredIndex(index);
 setLoading(true);
   axios
-  .get('https://hianimeapi-09b09f8b1d48.herokuapp.com/animeInfo', {
+  .get('https://could-harold-awarded-patio.trycloudflare.com/animeInfo', {
     params: { animeId }
   })
   .then(response => {
