@@ -136,10 +136,8 @@ function plusSlides(n) {
 });
 
 useEffect(() => {
-  if (slideshow.current) {
-    showSlides(slideIndex);
-  }
-}, [slideIndex, showSlides]); // slideIndex ref object is stable, safe to include
+  plusSlides(1)
+}, []); // slideIndex ref object is stable, safe to include
 
   const [recUpd,setRecUpd] = useState([])
 const indexOfLastItem = currentPage * itemsPerPage;
