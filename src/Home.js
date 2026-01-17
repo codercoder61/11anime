@@ -109,7 +109,7 @@ function plusSlides(n) {
   if (currentSlide) 
      currentSlide.style.display = "block";
 }
-plusSlides(1)
+plusSlides(0)
 
 
 
