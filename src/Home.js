@@ -92,10 +92,22 @@ const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
 const [currentPage, setCurrentPage] = useState(1);
 const itemsPerPage = 8; // adjust as needed
 let slideIndex = 1; // mutable, persists across renders
+const slides = document.getElementsByClassName("mySlides");
 
 function plusSlides(n) {
-  slideIndex += n;  
-  showSlides(slideIndex); // pass current value to showSlides
+  slideIndex += n;
+  if (!slides || slides.length === 0) return;
+  if (slideIndex > slides.length) 
+     slideIndex = 1;
+  else 
+     if (slideIndex < 1) 
+        slideIndex = slides.length;
+  for (let i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  const currentSlide = slides[slideIndex - 1];
+  if (currentSlide) 
+     currentSlide.style.display = "block";
 }
 
 
@@ -103,7 +115,7 @@ function plusSlides(n) {
 
 const showSlides = useCallback((n) => {
   let slideIndex = n; // local variable
-  const slides = document.getElementsByClassName("mySlides");
+  //const slides = document.getElementsByClassName("mySlides");
   if (!slides || slides.length === 0) return;
 
   if (slideIndex > slides.length) slideIndex = 1;
