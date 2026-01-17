@@ -109,7 +109,7 @@ function plusSlides(n) {
   if (currentSlide) 
      currentSlide.style.display = "block";
 }
-
+plusSlides(1)
 
 
 
@@ -135,9 +135,7 @@ function plusSlides(n) {
     //('DOM fully loaded and parsed');
 });
 
-useEffect(() => {
-  plusSlides(1)
-}, [plusSlides]); // slideIndex ref object is stable, safe to include
+
 
   const [recUpd,setRecUpd] = useState([])
 const indexOfLastItem = currentPage * itemsPerPage;
