@@ -46,7 +46,7 @@ const [searchParams] = useSearchParams();
     }
   
     try {
-      const { data } = await axios.get('https://could-harold-awarded-patio.trycloudflare.com/search', {
+      const { data } = await axios.get('https://dollars-approx-perth-str.trycloudflare.com/search', {
         params: { keyword: search },
       });
       //(data)
@@ -151,7 +151,7 @@ const totalPages = Math.ceil((recUpd?.length || 0) / itemsPerPage);
   if (anchor) anchor.scrollIntoView({ behavior: "smooth" });
 
   try {
-    const response = await axios.get(`https://could-harold-awarded-patio.trycloudflare.com/search?keyword=${show}`);
+    const response = await axios.get(`https://dollars-approx-perth-str.trycloudflare.com/search?keyword=${show}`);
     //('Response:', response);
 
     const newData = response.data.animeList || [];
@@ -170,7 +170,7 @@ const totalPages = Math.ceil((recUpd?.length || 0) / itemsPerPage);
     const fetchData = async (page=1) => {
       try {
          
-        const response = await axios.get(`https://could-harold-awarded-patio.trycloudflare.com/?category=tv&page=${page}`, {
+        const response = await axios.get(`https://dollars-approx-perth-str.trycloudflare.com/?category=tv&page=${page}`, {
       type:'tv',
     })
         //(response)
@@ -187,7 +187,7 @@ const totalPages = Math.ceil((recUpd?.length || 0) / itemsPerPage);
       {
 setLoading2(true)
 
-      axios.get('https://could-harold-awarded-patio.trycloudflare.com/filter', {
+      axios.get('https://dollars-approx-perth-str.trycloudflare.com/filter', {
     params: {
       genree: genree1,
       typee: typee1,
@@ -223,7 +223,7 @@ const handleSubmit = (e) => {
   setRecUpd(null);  // Clear previous filtered results
 
   // Make the API call with the filter parameters as query parameters
-  axios.get('https://could-harold-awarded-patio.trycloudflare.com/filter', {
+  axios.get('https://dollars-approx-perth-str.trycloudflare.com/filter', {
   params: {
     typee,
     statuse,
@@ -384,7 +384,7 @@ const handleMouseEnter = (animeId, index) => {
   setHoveredIndex(index);
 setLoading(true);
   axios
-  .get('https://could-harold-awarded-patio.trycloudflare.com/animeInfo', {
+  .get('https://dollars-approx-perth-str.trycloudflare.com/animeInfo', {
     params: { animeId }
   })
   .then(response => {
