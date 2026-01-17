@@ -113,21 +113,21 @@ function plusSlides(n) {
 
 
 
-const showSlides = useCallback((n) => {
-  let slideIndex = n; // local variable
-  //const slides = document.getElementsByClassName("mySlides");
-  if (!slides || slides.length === 0) return;
+// const showSlides = useCallback((n) => {
+//   let slideIndex = n; // local variable
+//   //const slides = document.getElementsByClassName("mySlides");
+//   if (!slides || slides.length === 0) return;
 
-  if (slideIndex > slides.length) slideIndex = 1;
-  else if (slideIndex < 1) slideIndex = slides.length;
+//   if (slideIndex > slides.length) slideIndex = 1;
+//   else if (slideIndex < 1) slideIndex = slides.length;
 
-  for (let i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
-  }
+//   for (let i = 0; i < slides.length; i++) {
+//     slides[i].style.display = "none";
+//   }
 
-  const currentSlide = slides[slideIndex - 1];
-  if (currentSlide) currentSlide.style.display = "block";
-}, []);
+//   const currentSlide = slides[slideIndex - 1];
+//   if (currentSlide) currentSlide.style.display = "block";
+// }, []);
 
 
   
