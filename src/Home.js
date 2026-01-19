@@ -38,30 +38,40 @@ const [searchParams] = useSearchParams();
   const genree1 = searchParams.get('genre');
   const typee1 = searchParams.get('type');
   const statuse1 = searchParams.get('status');
-  const handleSearch = async (search) => {
-    if (!search.trim()) {
-      setResults(null);
-      ress.current.style.display = 'none';
-      return;
+  let latestRequest = 0; // outside the function, keeps track of the latest request
+
+const handleSearch = async (search) => {
+  if (!search.trim()) {
+    setResults(null);
+    if (ress.current) ress.current.style.display = 'none';
+    return;
+  }
+
+  const currentRequest = ++latestRequest; // increment for this request
+
+  try {
+    const { data } = await axios.get(
+      'https://respondents-arena-citizens-chicago.trycloudflare.com/search',
+      { params: { keyword: search } }
+    );
+
+    // Only update results if this is the latest request
+    if (currentRequest !== latestRequest) return;
+
+    const results = data?.animeList || [];
+    setResults(results);
+
+    if (ress.current) {
+      ress.current.style.display = results.length > 0 ? 'block' : 'none';
     }
-  
-    try {
-      const { data } = await axios.get('https://respondents-arena-citizens-chicago.trycloudflare.com/search', {
-        params: { keyword: search },
-      });
-      //(data)
-      const results = data?.animeList || [];
-      setResults(results);
-      if(ress.current)
-        ress.current.style.display = results.length > 0 ? 'block' : 'none';
-  
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      // Optionally hide results or show error state
-      if(ress.current)
-        ress.current.style.display = 'none';
-    }
-  };
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    if (currentRequest !== latestRequest) return;
+
+    if (ress.current) ress.current.style.display = 'none';
+  }
+};
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
