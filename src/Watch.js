@@ -9,7 +9,7 @@ function Watch() {
 	const getEpisodeSource = (serverId)=>{
 		mop.current.style.paddingTop = "unset"
 	axios
-    .get('https://low-inherited-cheapest-guitar.trycloudflare.com/episodeSources', {
+    .get('https://respondents-arena-citizens-chicago.trycloudflare.com/episodeSources', {
       params: { serverId }
     })
     .then(response => {
@@ -210,7 +210,7 @@ useEffect(() => {
   }
 
   try {
-    const { data } = await axios.get('https://low-inherited-cheapest-guitar.trycloudflare.com/search', {
+    const { data } = await axios.get('https://respondents-arena-citizens-chicago.trycloudflare.com/search', {
       params: { keyword: search },
     });
     //(data)
@@ -242,7 +242,7 @@ const handleClick = (show) => {
 
 useEffect(() => {
   axios
-    .get('https://low-inherited-cheapest-guitar.trycloudflare.com/animeInfo', {
+    .get('https://respondents-arena-citizens-chicago.trycloudflare.com/animeInfo', {
       params: { animeId }
     })
     .then(response => {
@@ -257,7 +257,7 @@ const [servers,setServers] = useState([])
 const changeSource = async (episodeId, dub = false) => {
   try {
     const response = await axios.get(
-      'https://low-inherited-cheapest-guitar.trycloudflare.com/episodeServers',
+      'https://respondents-arena-citizens-chicago.trycloudflare.com/episodeServers',
       { params: { episodeId } }
     );
     //('Response:', response);
@@ -283,7 +283,7 @@ setIframeSrc(newSrc); // <-- use state instead of ref
 };
 useEffect(()=>{
   axios
-  .get('https://low-inherited-cheapest-guitar.trycloudflare.com/episodes', {
+  .get('https://respondents-arena-citizens-chicago.trycloudflare.com/episodes', {
     params: { dataId }
   })
   .then(response => {
@@ -292,7 +292,7 @@ useEffect(()=>{
     let episodeId = response.data.episodes[0].id
     changeSource(episodeId)
 	axios
-  .get('https://low-inherited-cheapest-guitar.trycloudflare.com/episodeServers', {
+  .get('https://respondents-arena-citizens-chicago.trycloudflare.com/episodeServers', {
     params: { episodeId }
   })
   .then(response => {
