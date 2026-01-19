@@ -38,7 +38,9 @@ const [searchParams] = useSearchParams();
   const genree1 = searchParams.get('genre');
   const typee1 = searchParams.get('type');
   const statuse1 = searchParams.get('status');
-  let latestRequest = 0; // outside the function, keeps track of the latest request
+  const latestRequest = useRef(0); // to track the latest request
+const searchTimeout = useRef(null); // for debouncing
+   
 const fetchSearchResults = async (search) => {
   if (!search.trim()) {
     setResults(null);
