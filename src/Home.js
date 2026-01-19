@@ -39,15 +39,14 @@ const [searchParams] = useSearchParams();
   const typee1 = searchParams.get('type');
   const statuse1 = searchParams.get('status');
   let latestRequest = 0; // outside the function, keeps track of the latest request
-
-const handleSearch = async (search) => {
+const fetchSearchResults = async (search) => {
   if (!search.trim()) {
     setResults(null);
     if (ress.current) ress.current.style.display = 'none';
     return;
   }
 
-  const currentRequest = ++latestRequest; // increment for this request
+  const currentRequest = ++latestRequest.current; // increment request counter
 
   try {
     const { data } = await axios.get(
@@ -55,8 +54,8 @@ const handleSearch = async (search) => {
       { params: { keyword: search } }
     );
 
-    // Only update results if this is the latest request
-    if (currentRequest !== latestRequest) return;
+    // Only update if this is the latest request
+    if (currentRequest !== latestRequest.current) return;
 
     const results = data?.animeList || [];
     setResults(results);
@@ -66,11 +65,19 @@ const handleSearch = async (search) => {
     }
   } catch (error) {
     console.error('Error fetching data:', error);
-    if (currentRequest !== latestRequest) return;
+    if (currentRequest !== latestRequest.current) return;
 
     if (ress.current) ress.current.style.display = 'none';
   }
 };
+
+const handleSearch = (search) => {
+  clearTimeout(searchTimeout.current);
+  searchTimeout.current = setTimeout(() => {
+    fetchSearchResults(search);
+  }, 300); // waits 300ms after typing stops
+};
+
 
 
   useEffect(() => {
