@@ -392,7 +392,7 @@ const handleMouseEnter = (animeId, index) => {
   setHoveredIndex(index);
 setLoading(true);
   axios
-  .get('https://low-inherited-cheapest-guitar.trycloudflare.com/animeInfo', {
+  .get('https://respondents-arena-citizens-chicago.trycloudflare.com/animeInfo', {
     params: { animeId }
   })
   .then(response => {
